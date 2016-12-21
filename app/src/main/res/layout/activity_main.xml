@@ -9,7 +9,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="br.com.dextra.poccanvas.MainActivity">
 
-    <br.com.dextra.poccanvas.LineChart
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+            <br.com.dextra.poccanvas.LineChart
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+    </HorizontalScrollView>
+
 </RelativeLayout>
