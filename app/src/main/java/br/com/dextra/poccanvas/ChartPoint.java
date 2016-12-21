@@ -1,10 +1,9 @@
 package br.com.dextra.poccanvas;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.R.attr.strokeWidth;
 
@@ -78,6 +77,10 @@ public class ChartPoint {
 
     public Paint getStatusPaint() {
         return this.status.getPaint();
+    }
+
+    public Status status(){
+        return this.status;
     }
 
     @Override

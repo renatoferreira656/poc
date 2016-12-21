@@ -1,10 +1,13 @@
 package br.com.dextra.poccanvas;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -19,6 +22,9 @@ public class LineChart extends View {
     private final Integer SPACE_DEFAULT = 40;
     private final Integer QTD_PER_SCREEN_DEFAULT = 3;
     private final Float paddingY;
+    private Bitmap alert;
+    private Bitmap ok;
+
     private Float paddingX;
 
     private List<ChartPoint> points;
@@ -42,7 +48,9 @@ public class LineChart extends View {
         circleRadius = 20;
         strokeWidth = 5;
         defaultPaint();
-        Drawable alert = getResources().getDrawable(R.drawable.alert, null);
+
+        alert = BitmapFactory.decodeResource(context.getResources(), R.drawable.alert);
+        ok = BitmapFactory.decodeResource(context.getResources(), R.drawable.ok);
     }
 
     @Override
@@ -72,6 +80,26 @@ public class LineChart extends View {
         }
         canvas.drawCircle(point.getX(), point.getY(), circleRadius, paint);
         canvas.drawCircle(point.getX(), point.getY(), circleRadius- 4, point.getStatusPaint());
+
+
+        int diff = circleRadius / 2;
+        Bitmap bitmap = getBitmapCircle(point.status());
+        if(bitmap !=null) {
+            canvas.drawBitmap(bitmap, point.getX() - diff, point.getY() - diff, paint);
+        }
+    }
+
+    private Bitmap getBitmapCircle(ChartPoint.Status status) {
+        if(ChartPoint.Status.OVERDUE.equals(status)){
+            return alert;
+        }
+        if(ChartPoint.Status.PAID.equals(status)){
+            return ok;
+        }
+        if(ChartPoint.Status.PENDING.equals(status)){
+            return ok;
+        }
+        return null;
     }
 
     private void drawText(Canvas canvas, Object text, ChartPoint point){
