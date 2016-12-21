@@ -129,13 +129,6 @@ public class LineChart extends View {
         }
     }
 
-    private float addLeftPaddingX(float x) {
-        if (x < paddingX) {
-            return x + paddingX;
-        }
-        return x;
-    }
-
     private float addPaddingY(float y) {
         if (y < paddingY) {
             return y + paddingY;

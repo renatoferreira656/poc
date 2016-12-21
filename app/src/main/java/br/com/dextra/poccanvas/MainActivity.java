@@ -22,14 +22,15 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF6F00")));
         LineChart lineChart = (LineChart) findViewById(R.id.line_chart);
         List<ChartPoint> originalData = new ArrayList<>();
-        originalData.add(new ChartPoint(100.0, ChartPoint.Status.PAID));
-        originalData.add(new ChartPoint(200.0, ChartPoint.Status.OVERDUE));
-        originalData.add(new ChartPoint(230.0, ChartPoint.Status.PAID));
-        originalData.add(new ChartPoint(180.0, ChartPoint.Status.PAID));
-        originalData.add(new ChartPoint(350.0, ChartPoint.Status.PENDING));
+        originalData.add(new ChartPoint(300.0, ChartPoint.Status.PAID, "JUL"));
+        originalData.add(new ChartPoint(100.0, ChartPoint.Status.PAID, "AGO"));
+        originalData.add(new ChartPoint(200.0, ChartPoint.Status.OVERDUE, "SET"));
+        originalData.add(new ChartPoint(230.0, ChartPoint.Status.PAID, "OUT"));
+        originalData.add(new ChartPoint(180.0, ChartPoint.Status.PAID, "NOV"));
+        originalData.add(new ChartPoint(350.0, ChartPoint.Status.PENDING, "DEZ"));
         lineChart.setData(originalData);
 
-        mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager());
+        mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager(), originalData);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
     }

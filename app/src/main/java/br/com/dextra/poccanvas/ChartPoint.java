@@ -32,21 +32,16 @@ public class ChartPoint {
     private float y;
     private Double originalValue;
     private Status status;
+    private String title;
 
-    public ChartPoint(Double originalValue, Status status) {
+    public ChartPoint(Double originalValue, Status status, String title) {
         this.originalValue = originalValue;
         this.status = status;
+        this.title = title;
     }
 
-    public ChartPoint(float x, float y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public ChartPoint(float x, float y, Double originalValue) {
-        this.x = x;
-        this.y = y;
-        this.originalValue = originalValue;
+    public String getTitle() {
+        return title;
     }
 
     public float getX() {
@@ -71,15 +66,11 @@ public class ChartPoint {
         return originalValue;
     }
 
-    public void setOriginalValue(Double originalValue) {
-        this.originalValue = originalValue;
-    }
-
     public Paint getStatusPaint() {
         return this.status.getPaint();
     }
 
-    public Status status(){
+    public Status status() {
         return this.status;
     }
 

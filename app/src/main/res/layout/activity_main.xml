@@ -7,70 +7,32 @@
     tools:context="br.com.dextra.poccanvas.MainActivity">
 
 
-    <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4">
-
-        <android.support.v4.view.PagerTitleStrip
-            android:id="@+id/pager_title_strip"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:background="#33b5e5"
-            android:textColor="#fff" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
             android:background="#0bb989"
             android:orientation="vertical">
-
-            <RelativeLayout
+            <android.support.v4.view.ViewPager
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="2"
-                android:orientation="vertical"
-                android:id="@+id/textBox">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|right"
-                    android:id="@+id/currency_symbol"
-                    android:layout_toLeftOf="@+id/price_value"
-                    android:layout_alignBottom="@+id/price_value"
-                    android:layout_marginBottom="15dp"
-                    android:textColor="#ffffff"
-                    android:textSize="30sp"
-                    android:text="R$"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="50sp"
-                    android:textColor="#ffffff"
-                    android:layout_above="@+id/bill_desc"
-                    android:layout_alignParentRight="true"
-                    android:paddingRight="10dp"
-                    android:id="@+id/price_value"
-                    android:text="350.0"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="#ffffff"
-                    android:layout_alignParentBottom="true"
-                    android:paddingRight="10dp"
-                    android:id="@+id/bill_desc"
-                    android:layout_alignParentRight="true"
-                    android:text="Pagamento recebido em 24/12"/>
-            </RelativeLayout>
+                android:paddingTop="20dp">
+
+            <android.support.v4.view.PagerTitleStrip
+                android:id="@+id/pager_title_strip"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textSize="18sp"
+                android:textColor="#fff" />
+
+            </android.support.v4.view.ViewPager>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:orientation="vertical">
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -84,7 +46,7 @@
                 </HorizontalScrollView>
             </LinearLayout>
         </LinearLayout>
-    </android.support.v4.view.ViewPager>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

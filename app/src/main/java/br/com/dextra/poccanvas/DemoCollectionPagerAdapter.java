@@ -5,29 +5,30 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import java.util.List;
+
 // Since this is an object collection, use a FragmentStatePagerAdapter,
 // and NOT a FragmentPagerAdapter.
 public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
-    public DemoCollectionPagerAdapter(FragmentManager fm) {
+    private List<ChartPoint> points;
+
+    public DemoCollectionPagerAdapter(FragmentManager fm, List<ChartPoint> points) {
         super(fm);
+        this.points = points;
     }
 
     @Override
     public Fragment getItem(int i) {
-        Fragment fragment = new DemoObjectFragment();
-        Bundle args = new Bundle();
-        args.putString(DemoObjectFragment.ARG_OBJECT, "marco");
-        fragment.setArguments(args);
-        return fragment;
+        return new DemoObjectFragment().init(this.points.get(i));
     }
 
     @Override
     public int getCount() {
-        return 100;
+        return this.points.size();
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        return "OBJECT " + (position + 1);
+    public CharSequence getPageTitle(int i) {
+        return this.points.get(i).getTitle();
     }
 }

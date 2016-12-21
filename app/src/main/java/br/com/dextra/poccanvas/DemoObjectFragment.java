@@ -8,13 +8,41 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class DemoObjectFragment extends Fragment {
-    public static final String ARG_OBJECT = "object";
+
+    private ChartPoint chartPoint;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_collection_object, container, false);
-        Bundle args = getArguments();
-        ((TextView) rootView.findViewById(android.R.id.text1)).setText(Integer.toString(args.getInt(ARG_OBJECT)));
+        if(this.chartPoint == null){
+            return rootView;
+        }
+        TextView price = (TextView) rootView.findViewById(R.id.price_value);
+        price.setText(formatPriceToText(this.chartPoint.getOriginalValue()));
+
+        TextView cents = (TextView) rootView.findViewById(R.id.price_cents_value);
+        cents.setText(formatCentsToText(this.chartPoint.getOriginalValue()));
+
+
         return rootView;
+    }
+
+    private String formatCentsToText(Double originalValue) {
+        String text = originalValue.toString();
+        String cents = text.split("\\.")[1];
+        if(cents.length() < 2){
+            return cents + "0";
+        }
+        return cents;
+    }
+
+    private String formatPriceToText(Double originalValue) {
+        String text = originalValue.toString();
+        return text.split("\\.")[0] + ",";
+    }
+
+    public Fragment init(ChartPoint chartPoint) {
+        this.chartPoint = chartPoint;
+        return this;
     }
 }
