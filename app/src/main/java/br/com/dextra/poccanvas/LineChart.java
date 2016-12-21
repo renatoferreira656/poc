@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -41,6 +42,7 @@ public class LineChart extends View {
         circleRadius = 20;
         strokeWidth = 5;
         defaultPaint();
+        Drawable alert = getResources().getDrawable(R.drawable.alert, null);
     }
 
     @Override
