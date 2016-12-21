@@ -7,10 +7,17 @@ public class ChartPoint {
 
     private float x;
     private float y;
+    private Double originalValue;
 
-    public ChartPoint(float x , float y){
+    public ChartPoint(float x, float y) {
         this.x = x;
         this.y = y;
+    }
+
+    public ChartPoint(float x, float y, Double originalValue) {
+        this.x = x;
+        this.y = y;
+        this.originalValue = originalValue;
     }
 
     public float getX() {
@@ -27,5 +34,18 @@ public class ChartPoint {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public Double getOriginalValue() {
+        return originalValue;
+    }
+
+    public void setOriginalValue(Double originalValue) {
+        this.originalValue = originalValue;
+    }
+
+    @Override
+    public String toString() {
+        return "ChartPoint{ 'x'=" + x + ", 'y'=" + y + '}';
     }
 }
