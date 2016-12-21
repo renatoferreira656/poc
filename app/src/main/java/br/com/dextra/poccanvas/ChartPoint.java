@@ -1,15 +1,32 @@
 package br.com.dextra.poccanvas;
 
+import android.graphics.Color;
+import android.graphics.Paint;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.R.attr.strokeWidth;
 
 /**
  * Created by renato.soares on 12/21/16.
  */
 public class ChartPoint {
 
-    public enum Status{
-        PAID, OVERDUE, PENDING, LATE_PAID;
+    public enum Status {
+        PAID("#5ACD76"), OVERDUE("#C43C3C"), PENDING("#F6F913"), LATE_PAID("#FFFFFF");
+
+        private Paint paint;
+
+        private Status(String color) {
+            paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setColor(Color.parseColor(color));
+            paint.setStrokeWidth(strokeWidth);
+        }
+
+        public Paint getPaint() {
+            return paint;
+        }
     }
 
     private float x;
@@ -17,7 +34,7 @@ public class ChartPoint {
     private Double originalValue;
     private Status status;
 
-    public ChartPoint(Double originalValue, Status status){
+    public ChartPoint(Double originalValue, Status status) {
         this.originalValue = originalValue;
         this.status = status;
     }
@@ -57,6 +74,10 @@ public class ChartPoint {
 
     public void setOriginalValue(Double originalValue) {
         this.originalValue = originalValue;
+    }
+
+    public Paint getStatusPaint() {
+        return this.status.getPaint();
     }
 
     @Override

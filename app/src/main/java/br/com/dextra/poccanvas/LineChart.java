@@ -26,8 +26,10 @@ public class LineChart extends View {
     private Float width;
     private Float height;
     private Paint paint;
-    private Integer strokeWidth;
+    private Paint paintPaid;
+    private Paint paintOverdue;
 
+    private Integer strokeWidth;
     private Integer circleRadius;
 
     public LineChart(Context context, AttributeSet attrs) {
@@ -51,15 +53,15 @@ public class LineChart extends View {
             if(last == null){
                 last = it.next();
                 drawText(canvas, last.getOriginalValue(), last);
-                drawCircle(canvas, last);
                 continue;
             }
             ChartPoint point = it.next();
             drawText(canvas, point.getOriginalValue(), point);
-            drawCircle(canvas, point);
             drawLine(canvas, last, point);
+            drawCircle(canvas, last);
             last = point;
         }
+        drawCircle(canvas, last);
     }
 
     private void drawCircle(Canvas canvas, ChartPoint point) {
@@ -67,6 +69,7 @@ public class LineChart extends View {
             return;
         }
         canvas.drawCircle(point.getX(), point.getY(), circleRadius, paint);
+        canvas.drawCircle(point.getX(), point.getY(), circleRadius- 4, point.getStatusPaint());
     }
 
     private void drawText(Canvas canvas, Object text, ChartPoint point){
