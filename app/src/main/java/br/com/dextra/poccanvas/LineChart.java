@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class LineChart extends View {
@@ -20,7 +21,6 @@ public class LineChart extends View {
     private Float paddingX;
 
     private List<ChartPoint> points;
-    private List<Double> originalData;
     private Integer space;
     private Integer qtdPerScreen;
     private Float width;
@@ -29,7 +29,6 @@ public class LineChart extends View {
     private Integer strokeWidth;
 
     private Integer circleRadius;
-    private ChartPoint initialPoint;
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,42 +44,56 @@ public class LineChart extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        points = this.convertDataToPoints();
-        ChartPoint last = initialPoint;
-        for (ChartPoint point : points) {
-            System.out.println(last);
-            canvas.drawLine(last.getX(), last.getY(), point.getX(), point.getY(), paint);
-            canvas.drawText(point.getOriginalValue().toString(), point.getX() - 15, point.getY() - 30, paint);
-            canvas.drawCircle(last.getX(), last.getY(), circleRadius, paint);
+        convertDataToPoints();
+        ChartPoint last = null;
+        Iterator<ChartPoint> it = points.iterator();
+        while(it.hasNext()){
+            if(last == null){
+                last = it.next();
+                drawText(canvas, last.getOriginalValue(), last);
+                drawCircle(canvas, last);
+                continue;
+            }
+            ChartPoint point = it.next();
+            drawText(canvas, point.getOriginalValue(), point);
+            drawCircle(canvas, point);
+            drawLine(canvas, last, point);
             last = point;
-        }
-        if (last != null) {
-            canvas.drawCircle(last.getX(), last.getY(), circleRadius, paint);
         }
     }
 
-    public LineChart setData(List<Double> originalData) {
-        this.originalData = originalData;
-        if (originalData == null) {
-            return this;
+    private void drawCircle(Canvas canvas, ChartPoint point) {
+        if(point == null){
+            return;
         }
-        this.invalidate();
+        canvas.drawCircle(point.getX(), point.getY(), circleRadius, paint);
+    }
+
+    private void drawText(Canvas canvas, Object text, ChartPoint point){
+        if(text == null){
+            return;
+        }
+        canvas.drawText(text.toString(), point.getX() - 15, point.getY() - 30, paint);
+    }
+
+    private void drawLine(Canvas canvas, ChartPoint initial, ChartPoint end) {
+        canvas.drawLine(initial.getX(), initial.getY(), end.getX(), end.getY(), paint);
+    }
+
+    public LineChart setData(List<ChartPoint> originalData) {
+        this.points = originalData;
         return this;
     }
 
     @NonNull
-    private List<ChartPoint> convertDataToPoints() {
-        float max = max(originalData);
-        float i = space;
-        List<ChartPoint> points = new ArrayList<ChartPoint>();
-        for (Double point : originalData) {
-            float yScreenPoint = discoverYScreenPoint(point, max);
-            yScreenPoint = addPaddingY(yScreenPoint);
-            i = addLeftPaddingX(i);
-            points.add(new ChartPoint(i, yScreenPoint, point));
+    private void convertDataToPoints() {
+        float max = max(points);
+        float i = paddingX;
+        for (ChartPoint point : points) {
+            float yScreenPoint = discoverYScreenPoint(point.getOriginalValue(), max);
+            point.setX(i).setY(addPaddingY(yScreenPoint));
             i = i + space;
         }
-        return points;
     }
 
     private float addLeftPaddingX(float x) {
@@ -102,9 +115,10 @@ public class LineChart extends View {
         return y;
     }
 
-    private float max(List<Double> arr) {
+    private float max(List<ChartPoint> arr) {
         float max = 0;
-        for (Double value : arr) {
+        for (ChartPoint point : arr) {
+            Double value = point.getOriginalValue();
             if (max < value.floatValue()) {
                 max = value.floatValue();
             }
@@ -115,7 +129,7 @@ public class LineChart extends View {
     @NonNull
     private LineChart defaultPaint() {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.WHITE);
         paint.setStrokeWidth(strokeWidth);
         return this;
     }
@@ -138,18 +152,17 @@ public class LineChart extends View {
         float half = parentWidth / 2;
         paddingX = half;
         space = (parentWidth / qtdPerScreen);
-        if (originalData == null) {
+        if (points == null) {
             this.width = (float) parentWidth;
         } else {
-            this.width = calWidth(half);
+            this.width = calWidth(paddingX);
         }
         height = new Float(MeasureSpec.getSize(heightMeasureSpec));
         this.setMeasuredDimension(this.width.intValue(), height.intValue());
-        initialPoint = new ChartPoint(half, height - paddingY);
     }
 
     private float calWidth(float padding) {
-        return originalData.size() * space + (padding*2);
+        return ((points.size() - 1) * space) + (padding*2);
     }
 }
 

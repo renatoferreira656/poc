@@ -17,11 +17,12 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Fatura Digital");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF6F00")));
         LineChart lineChart =  (LineChart) findViewById(R.id.line_chart);
-        List<Double> originalData = new ArrayList<>();
-        originalData.add(125.0);
-        originalData.add(30.0);
-        originalData.add(20.0);
-        originalData.add(50.0);
+        List<ChartPoint> originalData = new ArrayList<>();
+        originalData.add(new ChartPoint(100.0 , ChartPoint.Status.PAID));
+        originalData.add(new ChartPoint(200.0 , ChartPoint.Status.OVERDUE));
+        originalData.add(new ChartPoint(230.0 , ChartPoint.Status.PAID));
+        originalData.add(new ChartPoint(180.0 , ChartPoint.Status.PAID));
+        originalData.add(new ChartPoint(350.0 , ChartPoint.Status.PENDING));
         lineChart.setData(originalData);
     }
 }
