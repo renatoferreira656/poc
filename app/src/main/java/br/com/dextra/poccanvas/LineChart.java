@@ -12,35 +12,30 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-class LineChart extends View {
-    private List<Double> arr;
+public class LineChart extends View {
+
+    private final Integer SPACE_DEFAULT = 40;
+    private final Integer QTD_PER_SCREEN_DEFAULT = 5;
+
+    private final List<ChartPoint> points;
+    private List<Double> originalData;
     private Integer space;
     private Integer qtdPerScreen;
-    private Double width;
-    private Double height;
+    private Float width;
+    private Float height;
+    private Paint paint;
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
-        arr = values();
-        space = 40;
-        qtdPerScreen = 5;
+        space = SPACE_DEFAULT;
+        qtdPerScreen = QTD_PER_SCREEN_DEFAULT;
+        points = new ArrayList<>();
+        defaultPaint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Paint paint = paint();
-
-        float max = max(arr);
-        float height = this.height.floatValue();
-        float i = space;
-
-        List<ChartPoint> points = new ArrayList<ChartPoint>();
-        for (Double point: arr) {
-            float xgoing = convertDataToScreenPoint(point, height, max);
-            points.add(new ChartPoint(i, xgoing));
-            i = i + space;
-        }
         ChartPoint last = null;
         for (ChartPoint point: points) {
             if(last == null){
@@ -52,7 +47,31 @@ class LineChart extends View {
             }
             last = point;
         }
-        canvas.drawCircle(last.getX(), last.getY(), 20, paint);
+        if(last != null) {
+            canvas.drawCircle(last.getX(), last.getY(), 20, paint);
+        }
+    }
+
+    public LineChart setData(List<Double> originalData){
+        if(originalData == null){
+            return this;
+        }
+        this.originalData = originalData;
+        this.convertDataToPoints(originalData);
+        return this;
+    }
+
+    @NonNull
+    private List<ChartPoint> convertDataToPoints(List<Double> originalData) {
+        float max = max(originalData);
+        float i = space;
+        List<ChartPoint> points = new ArrayList<ChartPoint>();
+        for (Double point: originalData) {
+            float yScreenPoint = discoverYScreenPoint(point, max);
+            points.add(new ChartPoint(i, yScreenPoint));
+            i = i + space;
+        }
+        return points;
     }
 
     private float max(List<Double> arr) {
@@ -66,36 +85,39 @@ class LineChart extends View {
     }
 
     @NonNull
-    private Paint paint() {
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private LineChart defaultPaint() {
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(5);
-        return paint;
+        return this;
     }
 
-    @NonNull
-    private List<Double> values() {
-        List<Double> arr = new ArrayList<Double>(100);
-        for(int i = 0; i < 100; i++){
-            double size = Math.random() * 10;
-            arr.add(size);
-        }
-        return arr;
-    }
-
-    private float convertDataToScreenPoint(Double point, float height, float maxValue) {
-        float less = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, point.floatValue(), this.getResources().getDisplayMetrics());
-        maxValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, maxValue, this.getResources().getDisplayMetrics());
+    private float discoverYScreenPoint(Double point, float maxValue) {
+        float less = convertDpToPixel(point.floatValue());
+        maxValue = convertDpToPixel(maxValue);
         return height - (height * less / maxValue);
+    }
+
+    private Float convertDpToPixel(Float value){
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, this.getResources().getDisplayMetrics());
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        space = (this.getRootView().getWidth() / qtdPerScreen);
-        width = new Double(arr.size() * space + ( space * 4));
-        height = Integer.valueOf(MeasureSpec.getSize(heightMeasureSpec)).doubleValue();
-        this.setMeasuredDimension(width.intValue(), height.intValue());
+        int parentWidth = this.getRootView().getWidth();
+        space = (parentWidth / qtdPerScreen);
+        if(originalData == null){
+            this.width = (float) parentWidth;
+        } else {
+            this.width = new Float(calWidth());
+        }
+        height = new Float(MeasureSpec.getSize(heightMeasureSpec));
+        this.setMeasuredDimension(this.width.intValue(), height.intValue());
+    }
+
+    private int calWidth() {
+        return originalData.size() * space + ( space * 4);
     }
 }
 
