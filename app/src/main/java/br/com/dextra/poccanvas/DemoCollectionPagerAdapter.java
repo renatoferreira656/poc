@@ -12,14 +12,18 @@ import java.util.List;
 public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
     private List<ChartPoint> points;
 
-    public DemoCollectionPagerAdapter(FragmentManager fm, List<ChartPoint> points) {
+    public DemoCollectionPagerAdapter(FragmentManager fm, List<ChartPoint>  points) {
         super(fm);
         this.points = points;
     }
 
     @Override
     public Fragment getItem(int i) {
-        return new DemoObjectFragment().init(this.points.get(i));
+        ChartPoint chartPoint = this.points.get(i);
+        if(chartPoint == null){
+            return new DemoObjectFragment();
+        }
+        return new DemoObjectFragment().init(chartPoint);
     }
 
     @Override

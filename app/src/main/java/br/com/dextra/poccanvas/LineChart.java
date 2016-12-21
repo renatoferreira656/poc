@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,6 +40,7 @@ public class LineChart extends View {
     private Paint paintOverdue;
     private Integer strokeWidth;
     private Integer circleRadius;
+    private HorizontalScrollView scrollView;
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -204,6 +206,19 @@ public class LineChart extends View {
 
     private float calWidth(float padding) {
         return ((points.size() - 1) * space) + (padding*2);
+    }
+
+    public List<ChartPoint> getPoints() {
+        return points;
+    }
+
+    public LineChart scrollView(HorizontalScrollView scrollView){
+        this.scrollView = scrollView;
+        return this;
+    }
+
+    public HorizontalScrollView scrollView(){
+        return this.scrollView;
     }
 }
 
