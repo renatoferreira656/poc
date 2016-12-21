@@ -34,8 +34,9 @@ public class LineChart extends View {
     private Float height;
     private Paint paint;
     private Paint paintPaid;
-    private Paint paintOverdue;
+    private Paint paintText;
 
+    private Paint paintOverdue;
     private Integer strokeWidth;
     private Integer circleRadius;
 
@@ -106,7 +107,21 @@ public class LineChart extends View {
         if(text == null){
             return;
         }
-        canvas.drawText(text.toString(), point.getX() - 15, point.getY() - 30, paint);
+        canvas.drawText(formatValueToText(text), point.getX() - 50, point.getY() - 30, paintText());
+    }
+
+    private String formatValueToText(Object text) {
+        return "R$ " + text.toString().replace(".", ",");
+    }
+
+    private Paint paintText() {
+        if(paintText != null){
+            return paintText;
+        }
+        paintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paintText.setColor(Color.argb(150, 255, 255, 255));
+        paintText.setTextSize(28);
+        return paintText;
     }
 
     private void drawLine(Canvas canvas, ChartPoint initial, ChartPoint end) {
