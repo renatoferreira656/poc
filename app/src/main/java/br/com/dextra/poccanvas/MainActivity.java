@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 ChartPoint chartPoint = originalData.get(position);
                 float max = maxX(originalData);
-                int x = discoverScrollX(chartPoint.getX(), max, lineChart.getWidth());
+                int x = discoverScrollX(chartPoint.getX() - lineChart.padding(), max, lineChart.width());
                 horiz.smoothScrollTo(x, 0);
             }
 

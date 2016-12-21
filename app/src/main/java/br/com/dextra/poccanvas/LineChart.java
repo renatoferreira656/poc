@@ -34,13 +34,10 @@ public class LineChart extends View {
     private Float width;
     private Float height;
     private Paint paint;
-    private Paint paintPaid;
     private Paint paintText;
 
-    private Paint paintOverdue;
     private Integer strokeWidth;
     private Integer circleRadius;
-    private HorizontalScrollView scrollView;
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -212,13 +209,12 @@ public class LineChart extends View {
         return points;
     }
 
-    public LineChart scrollView(HorizontalScrollView scrollView){
-        this.scrollView = scrollView;
-        return this;
+    public float width(){
+        return this.width;
     }
 
-    public HorizontalScrollView scrollView(){
-        return this.scrollView;
+    public float padding() {
+        return paddingX;
     }
 }
 
