@@ -33,6 +33,7 @@ public class LineChart extends View {
     private Integer paddingScreenCircle = 10;
 
     private Integer circleRadius;
+    private int position;
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -52,14 +53,20 @@ public class LineChart extends View {
         convertDataToPoints();
         ChartPoint last = null;
         Iterator<ChartPoint> it = points.iterator();
+        int i = -1;
         while(it.hasNext()){
+            i++;
             if(last == null){
                 last = it.next();
-                drawText(canvas, last.getOriginalValue(), last);
+                if(position != i) {
+                    drawText(canvas, last.getOriginalValue(), last);
+                }
                 continue;
             }
             ChartPoint point = it.next();
-            drawText(canvas, point.getOriginalValue(), point);
+            if(position != i) {
+                drawText(canvas, point.getOriginalValue(), point);
+            }
             drawLine(canvas, last, point);
             drawCircle(canvas, last);
             last = point;
@@ -211,6 +218,11 @@ public class LineChart extends View {
 
     public int paddingScreen(){
         return this.circleRadius + paddingScreenCircle;
+    }
+
+    public LineChart position(int position) {
+        this.position = position;
+        return this;
     }
 }
 

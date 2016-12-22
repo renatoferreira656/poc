@@ -36,6 +36,8 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
         ObjectAnimator animator = ObjectAnimator.ofInt(scrollView, "scrollX", calcScroll);
         animator.setDuration(400);
         animator.start();
+        this.lineChart.position(position);
+        this.lineChart.invalidate();
     }
 
     @Override
