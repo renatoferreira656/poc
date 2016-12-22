@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="br.com.dextra.poccanvas.MainActivity">
+    tools:context="br.com.nextel.cleanversion.bill.activity.MainActivity">
 
 
         <LinearLayout
@@ -40,7 +40,7 @@
                     android:layout_height="match_parent"
                     android:scrollbars="none"
                     android:overScrollMode="never">
-                        <br.com.dextra.poccanvas.LineChart
+                        <br.com.nextel.cleanversion.bill.chart.LineChart
                             android:id="@+id/line_chart"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent" />

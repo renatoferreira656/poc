@@ -1,18 +1,20 @@
-package br.com.dextra.poccanvas;
+package br.com.nextel.cleanversion.bill.pager;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
+import br.com.nextel.cleanversion.bill.chart.ChartPoint;
+import br.com.nextel.cleanversion.bill.fragment.BillPagerFragment;
+
 // Since this is an object collection, use a FragmentStatePagerAdapter,
 // and NOT a FragmentPagerAdapter.
-public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
+public class BillPagerAdapter extends FragmentStatePagerAdapter {
     private List<ChartPoint> points;
 
-    public DemoCollectionPagerAdapter(FragmentManager fm, List<ChartPoint>  points) {
+    public BillPagerAdapter(FragmentManager fm, List<ChartPoint> points) {
         super(fm);
         this.points = points;
     }
@@ -21,9 +23,9 @@ public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
         ChartPoint chartPoint = this.points.get(i);
         if(chartPoint == null){
-            return new DemoObjectFragment();
+            return new BillPagerFragment();
         }
-        return new DemoObjectFragment().init(chartPoint);
+        return new BillPagerFragment().init(chartPoint);
     }
 
     @Override

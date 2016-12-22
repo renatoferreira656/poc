@@ -1,4 +1,4 @@
-package br.com.dextra.poccanvas;
+package br.com.nextel.cleanversion.bill.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class DemoObjectFragment extends Fragment {
+import br.com.dextra.cleanversion.R;
+import br.com.nextel.cleanversion.bill.chart.ChartPoint;
+
+public class BillPagerFragment extends Fragment {
 
     private ChartPoint chartPoint;
 

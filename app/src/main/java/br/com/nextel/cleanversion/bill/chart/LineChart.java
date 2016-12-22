@@ -1,22 +1,19 @@
-package br.com.dextra.poccanvas;
+package br.com.nextel.cleanversion.bill.chart;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.HorizontalScrollView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import br.com.dextra.cleanversion.R;
 
 public class LineChart extends View {
 
@@ -33,10 +30,7 @@ public class LineChart extends View {
     private Integer qtdPerScreen;
     private Float width;
     private Float height;
-    private Paint paint;
-    private Paint paintText;
 
-    private Integer strokeWidth;
     private Integer circleRadius;
 
     public LineChart(Context context, AttributeSet attrs) {
@@ -46,8 +40,6 @@ public class LineChart extends View {
         paddingY = convertDpToPixel(40f);
         points = new ArrayList<>();
         circleRadius = 20;
-        strokeWidth = 5;
-        defaultPaint();
 
         alert = BitmapFactory.decodeResource(context.getResources(), R.drawable.alert);
         ok = BitmapFactory.decodeResource(context.getResources(), R.drawable.ok);
@@ -78,14 +70,14 @@ public class LineChart extends View {
         if(point == null){
             return;
         }
-        canvas.drawCircle(point.getX(), point.getY(), circleRadius, paint);
-        canvas.drawCircle(point.getX(), point.getY(), circleRadius- 4, point.getStatusPaint());
+        canvas.drawCircle(point.getX(), point.getY(), circleRadius, PaintUtil.defaultPaint());
+        canvas.drawCircle(point.getX(), point.getY(), circleRadius - 4, point.getStatusPaint());
 
 
         int diff = circleRadius / 2;
         Bitmap bitmap = getBitmapCircle(point.status());
         if(bitmap !=null) {
-            canvas.drawBitmap(bitmap, point.getX() - diff, point.getY() - diff, paint);
+            canvas.drawBitmap(bitmap, point.getX() - diff, point.getY() - diff, PaintUtil.defaultPaint());
         }
     }
 
@@ -106,25 +98,15 @@ public class LineChart extends View {
         if(text == null){
             return;
         }
-        canvas.drawText(formatValueToText(text), point.getX() - 50, point.getY() - 30, paintText());
+        canvas.drawText(formatValueToText(text), point.getX() - 50, point.getY() - 30, PaintUtil.textPaint());
     }
 
     private String formatValueToText(Object text) {
         return "R$ " + text.toString().replace(".", ",");
     }
 
-    private Paint paintText() {
-        if(paintText != null){
-            return paintText;
-        }
-        paintText = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintText.setColor(Color.argb(150, 255, 255, 255));
-        paintText.setTextSize(28);
-        return paintText;
-    }
-
     private void drawLine(Canvas canvas, ChartPoint initial, ChartPoint end) {
-        canvas.drawLine(initial.getX(), initial.getY(), end.getX(), end.getY(), paint);
+        canvas.drawLine(initial.getX(), initial.getY(), end.getX(), end.getY(), PaintUtil.defaultPaint());
     }
 
     public LineChart setData(List<ChartPoint> originalData) {
@@ -134,7 +116,7 @@ public class LineChart extends View {
 
     @NonNull
     private void convertDataToPoints() {
-        float max = max(points);
+        float max = maxY();
         float i = paddingX;
         for (ChartPoint point : points) {
             float yScreenPoint = discoverYScreenPoint(point.getOriginalValue(), max);
@@ -153,25 +135,6 @@ public class LineChart extends View {
         }
 
         return y;
-    }
-
-    private float max(List<ChartPoint> arr) {
-        float max = 0;
-        for (ChartPoint point : arr) {
-            Double value = point.getOriginalValue();
-            if (max < value.floatValue()) {
-                max = value.floatValue();
-            }
-        }
-        return max;
-    }
-
-    @NonNull
-    private LineChart defaultPaint() {
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.WHITE);
-        paint.setStrokeWidth(strokeWidth);
-        return this;
     }
 
     private float discoverYScreenPoint(Double point, float maxValue) {
@@ -215,6 +178,35 @@ public class LineChart extends View {
 
     public float padding() {
         return paddingX;
+    }
+
+    public ChartPoint point(int position) {
+        ChartPoint chartPoint = this.points.get(position);
+        if(chartPoint == null){
+            return null;
+        }
+        return chartPoint;
+    }
+
+    public float maxX() {
+        float max = 0;
+        for(ChartPoint point : this.points){
+            if(max < point.getX()){
+                max = point.getX();
+            }
+        }
+        return max;
+    }
+
+    private float maxY() {
+        float max = 0;
+        for (ChartPoint point : this.points) {
+            Double value = point.getOriginalValue();
+            if (max < value.floatValue()) {
+                max = value.floatValue();
+            }
+        }
+        return max;
     }
 }
 

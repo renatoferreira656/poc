@@ -1,7 +1,5 @@
-package br.com.dextra.poccanvas;
+package br.com.nextel.cleanversion.bill.chart;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 
@@ -18,9 +16,7 @@ public class ChartPoint {
         private Paint paint;
 
         private Status(String color) {
-            paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setColor(Color.parseColor(color));
-            paint.setStrokeWidth(strokeWidth);
+            paint = PaintUtil.newPaint(color);
         }
 
         public Paint getPaint() {

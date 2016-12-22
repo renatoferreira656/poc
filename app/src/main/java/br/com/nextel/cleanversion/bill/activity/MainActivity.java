@@ -1,0 +1,57 @@
+package br.com.nextel.cleanversion.bill.activity;
+
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.ViewTreeObserver;
+import android.widget.HorizontalScrollView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.nextel.cleanversion.bill.chart.ChartPoint;
+import br.com.nextel.cleanversion.bill.listener.PagerGraphListener;
+import br.com.nextel.cleanversion.bill.pager.BillPagerAdapter;
+import br.com.nextel.cleanversion.bill.chart.LineChart;
+import br.com.dextra.cleanversion.R;
+
+public class MainActivity extends AppCompatActivity {
+
+    private BillPagerAdapter mDemoCollectionPagerAdapter;
+    private ViewPager mViewPager;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        getSupportActionBar().setTitle("Fatura Digital");
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF6F00")));
+        LineChart lineChart = (LineChart) findViewById(R.id.line_chart);
+        lineChart.setData(hardCodedData());
+
+        HorizontalScrollView horiz = (HorizontalScrollView) findViewById(R.id.scroll_line_chart);
+        horiz.getViewTreeObserver().addOnScrollChangedListener(new PagerGraphListener(lineChart, horiz));
+
+        mDemoCollectionPagerAdapter = new BillPagerAdapter(getSupportFragmentManager(), lineChart.getPoints());
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mDemoCollectionPagerAdapter);
+        mViewPager.addOnPageChangeListener(new PagerGraphListener(lineChart, horiz));
+    }
+
+    @NonNull
+    private List<ChartPoint> hardCodedData() {
+        List<ChartPoint> originalData = new ArrayList<>();
+        originalData.add(new ChartPoint(300.0, ChartPoint.Status.PAID, "JUL"));
+        originalData.add(new ChartPoint(100.0, ChartPoint.Status.PAID, "AGO"));
+        originalData.add(new ChartPoint(200.0, ChartPoint.Status.OVERDUE, "SET"));
+        originalData.add(new ChartPoint(230.0, ChartPoint.Status.PAID, "OUT"));
+        originalData.add(new ChartPoint(180.0, ChartPoint.Status.PAID, "NOV"));
+        originalData.add(new ChartPoint(350.0, ChartPoint.Status.PENDING, "DEZ"));
+        return originalData;
+    }
+
+
+}

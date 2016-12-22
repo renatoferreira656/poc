@@ -1,4 +1,4 @@
-package br.com.dextra.poccanvas;
+package br.com.dextra.cleanversion;
 
 import org.junit.Test;
 
