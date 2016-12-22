@@ -16,12 +16,13 @@ import android.widget.HorizontalScrollView;
 import br.com.dextra.cleanversion.R;
 import br.com.nextel.cleanversion.bill.activity.MainActivity;
 import br.com.nextel.cleanversion.bill.chart.ChartPoint;
+import br.com.nextel.cleanversion.bill.chart.ChartPointStatus;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
 
 /**
  * Created by renato.soares on 12/22/16.
  */
-public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewTreeObserver.OnScrollChangedListener, View.OnTouchListener {
+public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewTreeObserver.OnScrollChangedListener, View.OnTouchListener, GraphEventListener {
     private GestureDetector gestureDetector;
     private MainActivity activity;
     private ViewPager viewPager;
@@ -34,7 +35,7 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
         this.viewPager = viewPager;
         this.lineChart = lineChart;
         this.scrollView = scrollView;
-        this.gestureDetector = new GestureDetector(lineChart.getContext(), new GestureListener());
+        this.gestureDetector = new GestureDetector(lineChart.getContext(), new GestureListener(this));
     }
 
     @Override
@@ -62,7 +63,7 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
         this.oldPosition = position;
     }
 
-    public TransitionDrawable transition(ChartPoint.Status from, ChartPoint.Status to){
+    public TransitionDrawable transition(ChartPointStatus from, ChartPointStatus to){
         Drawable[] drawable = new Drawable[2];
         drawable[0] = from.background(this.activity);
         drawable[1] = to.background(this.activity);
@@ -104,27 +105,7 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
         }
     }
 
-    private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
-
-        private static final int SWIPE_THRESHOLD = 60;
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return true;
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            float diffX = e2.getX() - e1.getX();
-            if (Math.abs(diffX) > SWIPE_THRESHOLD) {
-                if (diffX > 0) {
-                    onSwipeRight();
-                    return true;
-                }
-                onSwipeLeft();
-            }
-            return true;
-        }
+    public void touch(float x, float y){
     }
 }
 
