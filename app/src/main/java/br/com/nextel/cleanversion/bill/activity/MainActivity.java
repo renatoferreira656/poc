@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 
@@ -23,10 +24,14 @@ import br.com.dextra.cleanversion.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    private View graphHolderView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        graphHolderView = findViewById(R.id.bill_graph_holder);
         getSupportActionBar().setTitle("Fatura Digital");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF6F00")));
         LineChart lineChart = (LineChart) findViewById(R.id.line_chart);
@@ -65,5 +70,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.bill_description, billDescriptionFragment);
         transaction.commit();
+    }
+
+    public View graphHolder() {
+        return graphHolderView;
     }
 }

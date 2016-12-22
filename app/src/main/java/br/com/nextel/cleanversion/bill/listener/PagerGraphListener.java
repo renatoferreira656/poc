@@ -1,6 +1,7 @@
 package br.com.nextel.cleanversion.bill.listener;
 
 import android.animation.ObjectAnimator;
+import android.graphics.drawable.TransitionDrawable;
 import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 
+import br.com.dextra.cleanversion.R;
 import br.com.nextel.cleanversion.bill.activity.MainActivity;
 import br.com.nextel.cleanversion.bill.chart.ChartPoint;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
@@ -47,6 +49,21 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
         animator.setDuration(400);
         animator.start();
         this.activity.changeDetails(point);
+
+
+        if(point.status().equals(ChartPoint.Status.OVERDUE)){
+            this.activity.graphHolder().setBackgroundResource(R.drawable.red_green_transition);
+            TransitionDrawable transition = (TransitionDrawable) this.activity.graphHolder().getBackground();
+            transition.startTransition(200);
+        } else if(point.status().equals(ChartPoint.Status.PAID)){
+            this.activity.graphHolder().setBackgroundResource(R.drawable.green_green_transition);
+            TransitionDrawable transition = (TransitionDrawable) this.activity.graphHolder().getBackground();
+            transition.startTransition(200);
+        } else if(point.status().equals(ChartPoint.Status.PENDING)) {
+            this.activity.graphHolder().setBackgroundResource(R.drawable.yellow_green_transition);
+            TransitionDrawable transition = (TransitionDrawable) this.activity.graphHolder().getBackground();
+            transition.startTransition(200);
+        }
     }
 
     @Override
