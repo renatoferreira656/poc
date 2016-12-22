@@ -58,16 +58,12 @@ public class LineChart extends View {
         super.onDraw(canvas);
         convertDataToPoints();
         ChartPoint last = null;
-        ChartPoint first = null;
         Iterator<ChartPoint> it = points.iterator();
         int i = -1;
-        Path path = new Path();
         while(it.hasNext()){
             i++;
             if(last == null){
                 last = it.next();
-                first = last;
-                path.moveTo(last.getX(), last.getY());
                 if(position != i) {
                     drawText(canvas, last.getOriginalValue(), last);
                 } else {
@@ -76,37 +72,42 @@ public class LineChart extends View {
                 continue;
             }
             ChartPoint point = it.next();
-            if(first == null){
-
-            }
             if(position >= i) {
-                path.lineTo(point.getX(), point.getY());
                 if(position != i) {
                     drawText(canvas, point.getOriginalValue(), point);
                 } else {
-                    path.lineTo(point.getX(), height);
-                    path.lineTo(first.getX(), height);
-                    path.lineTo(first.getX(), first.getY());
                     pulseCircle(canvas, point);
                 }
+                drawPath(canvas, last, point, false);
+            } else {
+                drawPath(canvas, last, point, true);
             }
             drawLine(canvas, last, point);
             drawCircle(canvas, last);
             last = point;
         }
-        drawPath(canvas, path);
         drawCircle(canvas, last);
         invalidate();
     }
 
-    private void drawPath(Canvas canvas, Path path) {
+    private void drawPath(Canvas canvas, ChartPoint init, ChartPoint end, boolean after) {
+        Path path = new Path();
+
+        path.moveTo(init.getX(), init.getY());
+        path.lineTo(end.getX(), end.getY());
+        path.lineTo(end.getX(), height);
+        path.lineTo(init.getX(), height);
+        path.lineTo(init.getX(), init.getY());
+
+        int alpha = after ? 10 : 40;
+
         Paint paint = PaintUtil.pulsePaint();
-        paint.setColor(Color.argb(20, 255, 255, 255));
+        paint.setColor(Color.argb(alpha, 255, 255, 255));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPath(path, paint);
 
         Paint strokePath = PaintUtil.pulsePaint();
-        strokePath.setColor(Color.argb(30, 255, 255, 255));
+        strokePath.setColor(Color.argb(alpha + 5, 255, 255, 255));
         strokePath.setStyle(Paint.Style.STROKE);
         canvas.drawPath(path, strokePath);
     }
