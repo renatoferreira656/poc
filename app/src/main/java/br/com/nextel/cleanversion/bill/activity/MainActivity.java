@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import br.com.nextel.cleanversion.bill.listener.PagerGraphListener;
 import br.com.nextel.cleanversion.bill.pager.BillPagerAdapter;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
 import br.com.dextra.cleanversion.R;
+import br.com.nextel.cleanversion.bill.pager.BillPagerTabStrip;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(pagerAdpater.getCount());
 
         lineChart.scrollView(listener);
+
+        BillPagerTabStrip tab = (BillPagerTabStrip) findViewById(R.id.pager_title_strip);
+
     }
 
     @NonNull
