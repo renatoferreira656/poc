@@ -14,6 +14,7 @@ public class PaintUtil {
     private static Paint paintText;
     private static Paint paint;
     private static Integer strokeWidth = 5;
+    private static Paint pulsePaint;
 
     public static Paint textPaint() {
         if (paintText != null) {
@@ -40,5 +41,14 @@ public class PaintUtil {
         paint.setColor(Color.parseColor(color));
         paint.setStrokeWidth(strokeWidth);
         return paint;
+    }
+
+    public static Paint pulsePaint() {
+        if (pulsePaint != null) {
+            return pulsePaint;
+        }
+        pulsePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        pulsePaint.setStrokeWidth(3);
+        return pulsePaint;
     }
 }

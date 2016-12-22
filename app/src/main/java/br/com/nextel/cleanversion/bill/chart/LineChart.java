@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -34,6 +36,8 @@ public class LineChart extends View {
 
     private Integer circleRadius;
     private int position;
+    private float radiusPosition;
+    private boolean open;
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -42,7 +46,8 @@ public class LineChart extends View {
         paddingY = convertDpToPixel(40f);
         points = new ArrayList<>();
         circleRadius = 20;
-
+        radiusPosition = 0;
+        open = true;
         alert = BitmapFactory.decodeResource(context.getResources(), R.drawable.alert);
         ok = BitmapFactory.decodeResource(context.getResources(), R.drawable.ok);
     }
@@ -60,18 +65,51 @@ public class LineChart extends View {
                 last = it.next();
                 if(position != i) {
                     drawText(canvas, last.getOriginalValue(), last);
+                } else {
+                    pulseCircle(canvas, last);
                 }
                 continue;
             }
             ChartPoint point = it.next();
             if(position != i) {
                 drawText(canvas, point.getOriginalValue(), point);
+            } else {
+                pulseCircle(canvas, point);
             }
             drawLine(canvas, last, point);
             drawCircle(canvas, last);
             last = point;
         }
         drawCircle(canvas, last);
+        invalidate();
+    }
+
+    private void pulseCircle(Canvas canvas, ChartPoint point) {
+        Paint paint = PaintUtil.pulsePaint();
+        paint.setColor(Color.argb(100, 255, 255, 255));
+        paint.setStyle(Paint.Style.STROKE);
+        int radius = calcPulseRadius();
+        canvas.drawCircle(point.getX(), point.getY(), radius, paint);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.argb(70, 255, 255, 255));
+        canvas.drawCircle(point.getX(), point.getY(), radius, paint);
+    }
+
+    private int calcPulseRadius() {
+        int maxRadius = circleRadius + 13;
+        if(open) {
+            radiusPosition = radiusPosition + 0.5f;
+            if(maxRadius < radiusPosition){
+                open = false;
+            }
+            return (int)radiusPosition;
+        }
+        radiusPosition = radiusPosition - 0.5f;
+        if(1 > radiusPosition){
+            open = true;
+        }
+        return (int)radiusPosition;
+
     }
 
     private void drawCircle(Canvas canvas, ChartPoint point) {
@@ -117,10 +155,6 @@ public class LineChart extends View {
         return points;
     }
 
-    public float width(){
-        return this.width;
-    }
-
     public float padding() {
         return paddingX;
     }
@@ -131,16 +165,6 @@ public class LineChart extends View {
             return null;
         }
         return chartPoint;
-    }
-
-    public float maxX() {
-        float max = 0;
-        for(ChartPoint point : this.points){
-            if(max < point.getX()){
-                max = point.getX();
-            }
-        }
-        return max;
     }
 
     @Override
