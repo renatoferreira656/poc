@@ -1,9 +1,11 @@
 package br.com.nextel.cleanversion.bill.chart;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 
-import static android.R.attr.strokeWidth;
+import br.com.dextra.cleanversion.R;
 
 /**
  * Created by renato.soares on 12/21/16.
@@ -11,16 +13,32 @@ import static android.R.attr.strokeWidth;
 public class ChartPoint {
 
     public enum Status {
-        PAID("#5ACD76"), OVERDUE("#C43C3C"), PENDING("#F6F913"), LATE_PAID("#FFFFFF");
+        PAID("#5ACD76", R.drawable.ok),
+        OVERDUE("#C43C3C", R.drawable.alert),
+        PENDING("#F6F913", R.drawable.ok),
+        LATE_PAID("#FFFFFF", R.drawable.alert);
 
         private Paint paint;
+        private int bitmapRes;
+        private Bitmap bitmap;
 
-        private Status(String color) {
-            paint = PaintUtil.newPaint(color);
+        private Status(String color, int bitmapRes) {
+            this.paint = PaintUtil.newPaint(color);
+            this.bitmapRes = bitmapRes;
         }
 
         public Paint getPaint() {
             return paint;
+        }
+
+        public Bitmap bitmap(Context context) {
+            if(this.bitmap != null){
+                return this.bitmap;
+            }
+
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), this.bitmapRes);
+            this.bitmap = bitmap;
+            return bitmap;
         }
     }
 

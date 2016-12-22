@@ -2,7 +2,6 @@ package br.com.nextel.cleanversion.bill.chart;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,14 +15,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import br.com.dextra.cleanversion.R;
-
 public class LineChart extends View {
 
     private final Float paddingY = convertDpToPixel(40f);
-    private Bitmap alert;
-    private Bitmap ok;
-
     private Float paddingX;
 
     private List<ChartPoint> points = new ArrayList<>();
@@ -43,8 +37,6 @@ public class LineChart extends View {
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
-        alert = BitmapFactory.decodeResource(context.getResources(), R.drawable.alert);
-        ok = BitmapFactory.decodeResource(context.getResources(), R.drawable.ok);
 
         paintFillPath = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintFillPath.setStrokeWidth(2);
@@ -162,23 +154,7 @@ public class LineChart extends View {
         canvas.drawCircle(point.getX(), point.getY(), circleRadius - 4, point.getStatusPaint());
 
         int diff = circleRadius / 2;
-        Bitmap bitmap = getBitmapCircle(point.status());
-        if(bitmap !=null) {
-            canvas.drawBitmap(bitmap, point.getX() - diff, point.getY() - diff, PaintUtil.defaultPaint());
-        }
-    }
-
-    private Bitmap getBitmapCircle(ChartPoint.Status status) {
-        if(ChartPoint.Status.OVERDUE.equals(status)){
-            return alert;
-        }
-        if(ChartPoint.Status.PAID.equals(status)){
-            return ok;
-        }
-        if(ChartPoint.Status.PENDING.equals(status)){
-            return ok;
-        }
-        return null;
+        canvas.drawBitmap(point.status().bitmap(getContext()), point.getX() - diff, point.getY() - diff, PaintUtil.defaultPaint());
     }
 
     private void drawText(Canvas canvas, Object text, ChartPoint point){

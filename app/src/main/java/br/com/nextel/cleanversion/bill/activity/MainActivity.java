@@ -49,7 +49,10 @@ public class MainActivity extends AppCompatActivity {
         originalData.add(new ChartPoint(200.0, ChartPoint.Status.OVERDUE, "SET"));
         originalData.add(new ChartPoint(230.0, ChartPoint.Status.PAID, "OUT"));
         originalData.add(new ChartPoint(180.0, ChartPoint.Status.PAID, "NOV"));
-        originalData.add(new ChartPoint(350.0, ChartPoint.Status.PENDING, "DEZ"));
+        originalData.add(new ChartPoint(150.0, ChartPoint.Status.PENDING, "DEZ"));
+        originalData.add(new ChartPoint(50.0, ChartPoint.Status.PENDING, "JAN"));
+        originalData.add(new ChartPoint(10.0, ChartPoint.Status.PENDING, "FEV"));
+        originalData.add(new ChartPoint(90.0, ChartPoint.Status.PENDING, "MAR"));
         return originalData;
     }
 

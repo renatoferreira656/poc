@@ -67,7 +67,7 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
     }
 
     public void onSwipeLeft() {
-        if (viewPager.getCurrentItem() <= viewPager.getChildCount()) {
+        if (viewPager.getCurrentItem() <= viewPager.getAdapter().getCount()) {
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
         }
     }
