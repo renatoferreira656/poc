@@ -36,6 +36,11 @@ public class ChartPoint {
         this.title = title;
     }
 
+    public ChartPoint(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public String getTitle() {
         return title;
     }

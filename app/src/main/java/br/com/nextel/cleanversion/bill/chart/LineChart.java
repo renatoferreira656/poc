@@ -20,43 +20,52 @@ import br.com.dextra.cleanversion.R;
 
 public class LineChart extends View {
 
-    private final Integer SPACE_DEFAULT = 40;
-    private final Integer QTD_PER_SCREEN_DEFAULT = 3;
-    private final Float paddingY;
+    private final Float paddingY = convertDpToPixel(40f);
     private Bitmap alert;
     private Bitmap ok;
 
     private Float paddingX;
 
-    private List<ChartPoint> points;
-    private Integer space;
-    private Integer qtdPerScreen;
+    private List<ChartPoint> points = new ArrayList<>();
+    private Integer space = 40;
     private Float width;
     private Float height;
     private Integer paddingScreenCircle = 10;
 
-    private Integer circleRadius;
+    private Integer circleRadius = 20;
     private int position;
-    private float radiusPosition;
-    private boolean open;
+    private float radiusPosition = 0;
+    private boolean open = true;
+
+    List<Path> paths = new ArrayList<Path>();
+    private Paint paintStrokePath;
+    private Paint paintFillPath;
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
-        space = SPACE_DEFAULT;
-        qtdPerScreen = QTD_PER_SCREEN_DEFAULT;
-        paddingY = convertDpToPixel(40f);
-        points = new ArrayList<>();
-        circleRadius = 20;
-        radiusPosition = 0;
-        open = true;
         alert = BitmapFactory.decodeResource(context.getResources(), R.drawable.alert);
         ok = BitmapFactory.decodeResource(context.getResources(), R.drawable.ok);
+
+        paintFillPath = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paintFillPath.setStrokeWidth(2);
+        paintFillPath.setStyle(Paint.Style.FILL);
+
+        paintStrokePath = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paintFillPath.setStrokeWidth(2);
+        paintStrokePath.setStyle(Paint.Style.STROKE);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         convertDataToPoints();
+        drawAllLines(canvas);
+        drawPath(canvas);
+        drawAllCircles(canvas);
+        invalidate();
+    }
+
+    private void drawAllLines(Canvas canvas) {
         ChartPoint last = null;
         Iterator<ChartPoint> it = points.iterator();
         int i = -1;
@@ -64,52 +73,56 @@ public class LineChart extends View {
             i++;
             if(last == null){
                 last = it.next();
+                calcPath(new ChartPoint(0, height), last);
                 if(position != i) {
                     drawText(canvas, last.getOriginalValue(), last);
-                } else {
-                    pulseCircle(canvas, last);
                 }
                 continue;
             }
             ChartPoint point = it.next();
-            if(position >= i) {
-                if(position != i) {
-                    drawText(canvas, point.getOriginalValue(), point);
-                } else {
-                    pulseCircle(canvas, point);
-                }
-                drawPath(canvas, last, point, false);
-            } else {
-                drawPath(canvas, last, point, true);
+            if(position != i) {
+                drawText(canvas, point.getOriginalValue(), point);
             }
+            calcPath(last, point);
             drawLine(canvas, last, point);
-            drawCircle(canvas, last);
             last = point;
         }
-        drawCircle(canvas, last);
-        invalidate();
     }
 
-    private void drawPath(Canvas canvas, ChartPoint init, ChartPoint end, boolean after) {
-        Path path = new Path();
+    private void drawAllCircles(Canvas canvas) {
+        int i= 0;
+        for(ChartPoint point : points){
+            if(position == i) {
+                pulseCircle(canvas, point);
+            }
+            drawCircle(canvas, point);
+            i++;
+        }
+    }
 
+    private void drawPath(Canvas canvas){
+        int i = 0;
+        for(Path path: this.paths) {
+            int alpha = (i > position) ? 10 : 40;
+            paintFillPath.setColor(Color.argb(alpha, 255, 255, 255));
+            canvas.drawPath(path, paintFillPath);
+            paintStrokePath.setColor(Color.argb(alpha + 5, 255, 255, 255));
+            canvas.drawPath(path, paintStrokePath);
+            i++;
+        }
+    }
+
+    private void calcPath(ChartPoint init, ChartPoint end) {
+        if(paths.size() == points.size()){
+            return;
+        }
+        Path path = new Path();
         path.moveTo(init.getX(), init.getY());
         path.lineTo(end.getX(), end.getY());
         path.lineTo(end.getX(), height);
         path.lineTo(init.getX(), height);
         path.lineTo(init.getX(), init.getY());
-
-        int alpha = after ? 10 : 40;
-
-        Paint paint = PaintUtil.pulsePaint();
-        paint.setColor(Color.argb(alpha, 255, 255, 255));
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawPath(path, paint);
-
-        Paint strokePath = PaintUtil.pulsePaint();
-        strokePath.setColor(Color.argb(alpha + 5, 255, 255, 255));
-        strokePath.setStyle(Paint.Style.STROKE);
-        canvas.drawPath(path, strokePath);
+        paths.add(path);
     }
 
     private void pulseCircle(Canvas canvas, ChartPoint point) {
@@ -124,15 +137,16 @@ public class LineChart extends View {
     }
 
     private int calcPulseRadius() {
-        int maxRadius = circleRadius + 13;
+        int maxRadius = circleRadius + 20;
+        float speed = 0.8f;
         if(open) {
-            radiusPosition = radiusPosition + 0.5f;
+            radiusPosition = radiusPosition + speed;
             if(maxRadius < radiusPosition){
                 open = false;
             }
             return (int)radiusPosition;
         }
-        radiusPosition = radiusPosition - 0.5f;
+        radiusPosition = radiusPosition - speed;
         if(1 > radiusPosition){
             open = true;
         }
@@ -185,14 +199,6 @@ public class LineChart extends View {
 
     public Float padding() {
         return paddingX;
-    }
-
-    public ChartPoint point(int position) {
-        ChartPoint chartPoint = this.points.get(position);
-        if(chartPoint == null){
-            return null;
-        }
-        return chartPoint;
     }
 
     @Override
