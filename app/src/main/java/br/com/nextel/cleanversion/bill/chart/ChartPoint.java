@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 
 import br.com.dextra.cleanversion.R;
 
@@ -13,18 +15,21 @@ import br.com.dextra.cleanversion.R;
 public class ChartPoint {
 
     public enum Status {
-        PAID("#5ACD76", R.drawable.ok),
-        OVERDUE("#C43C3C", R.drawable.alert),
-        PENDING("#F6F913", R.drawable.ok),
-        LATE_PAID("#FFFFFF", R.drawable.alert);
+        PAID("#5ACD76", R.drawable.ok, R.drawable.bill_graph_green_gradient),
+        OVERDUE("#C43C3C", R.drawable.alert, R.drawable.bill_graph_red_gradient),
+        PENDING("#F6F913", R.drawable.ok, R.drawable.bill_graph_yellow_gradient),
+        LATE_PAID("#FFFFFF", R.drawable.alert, R.drawable.bill_graph_green_gradient);
 
         private Paint paint;
         private int bitmapRes;
+        private int backgroundColorRes;
         private Bitmap bitmap;
+        private Drawable backgroundColor;
 
-        private Status(String color, int bitmapRes) {
+        private Status(String color, int bitmapRes, int backgroundColor) {
             this.paint = PaintUtil.newPaint(color);
             this.bitmapRes = bitmapRes;
+            this.backgroundColorRes = backgroundColor;
         }
 
         public Paint getPaint() {
@@ -36,9 +41,16 @@ public class ChartPoint {
                 return this.bitmap;
             }
 
-            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), this.bitmapRes);
-            this.bitmap = bitmap;
-            return bitmap;
+            this.bitmap = BitmapFactory.decodeResource(context.getResources(), this.bitmapRes);
+            return this.bitmap;
+        }
+
+        public Drawable background(Context context) {
+            if(this.backgroundColor != null){
+                return this.backgroundColor;
+            }
+            this.backgroundColor = ContextCompat.getDrawable(context, this.backgroundColorRes);
+            return this.backgroundColor;
         }
     }
 
