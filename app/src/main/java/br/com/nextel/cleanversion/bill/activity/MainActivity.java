@@ -33,12 +33,14 @@ public class MainActivity extends AppCompatActivity {
         lineChart.setData(hardCodedData());
 
         HorizontalScrollView horiz = (HorizontalScrollView) findViewById(R.id.scroll_line_chart);
-        horiz.getViewTreeObserver().addOnScrollChangedListener(new PagerGraphListener(lineChart, horiz));
+        PagerGraphListener listener = new PagerGraphListener(lineChart, horiz);
+        horiz.getViewTreeObserver().addOnScrollChangedListener(listener);
+        horiz.setOnTouchListener(listener);
 
         mDemoCollectionPagerAdapter = new BillPagerAdapter(getSupportFragmentManager(), lineChart.getPoints());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
-        mViewPager.addOnPageChangeListener(new PagerGraphListener(lineChart, horiz));
+        mViewPager.addOnPageChangeListener(listener);
     }
 
     @NonNull

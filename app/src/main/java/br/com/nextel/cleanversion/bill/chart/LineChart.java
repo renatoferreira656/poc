@@ -30,6 +30,7 @@ public class LineChart extends View {
     private Integer qtdPerScreen;
     private Float width;
     private Float height;
+    private Integer paddingScreenCircle = 10;
 
     private Integer circleRadius;
 
@@ -73,7 +74,6 @@ public class LineChart extends View {
         canvas.drawCircle(point.getX(), point.getY(), circleRadius, PaintUtil.defaultPaint());
         canvas.drawCircle(point.getX(), point.getY(), circleRadius - 4, point.getStatusPaint());
 
-
         int diff = circleRadius / 2;
         Bitmap bitmap = getBitmapCircle(point.status());
         if(bitmap !=null) {
@@ -101,17 +101,75 @@ public class LineChart extends View {
         canvas.drawText(formatValueToText(text), point.getX() - 50, point.getY() - 30, PaintUtil.textPaint());
     }
 
+    public LineChart setData(List<ChartPoint> originalData) {
+        this.points = originalData;
+        return this;
+    }
+
+    public List<ChartPoint> getPoints() {
+        return points;
+    }
+
+    public float width(){
+        return this.width;
+    }
+
+    public float padding() {
+        return paddingX;
+    }
+
+    public ChartPoint point(int position) {
+        ChartPoint chartPoint = this.points.get(position);
+        if(chartPoint == null){
+            return null;
+        }
+        return chartPoint;
+    }
+
+    public float maxX() {
+        float max = 0;
+        for(ChartPoint point : this.points){
+            if(max < point.getX()){
+                max = point.getX();
+            }
+        }
+        return max;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int parentWidth = this.getRootView().getWidth();
+
+        float half = parentWidth / 2;
+        paddingX = half;
+        space = (int)(half - this.circleRadius - paddingScreenCircle);
+        if (points == null) {
+            this.width = (float) parentWidth;
+        } else {
+            this.width = calWidth(paddingX);
+        }
+        height = new Float(MeasureSpec.getSize(heightMeasureSpec));
+        this.setMeasuredDimension(this.width.intValue(), height.intValue());
+    }
+
+    private float maxY() {
+        float max = 0;
+        for (ChartPoint point : this.points) {
+            Double value = point.getOriginalValue();
+            if (max < value.floatValue()) {
+                max = value.floatValue();
+            }
+        }
+        return max;
+    }
+
     private String formatValueToText(Object text) {
         return "R$ " + text.toString().replace(".", ",");
     }
 
     private void drawLine(Canvas canvas, ChartPoint initial, ChartPoint end) {
         canvas.drawLine(initial.getX(), initial.getY(), end.getX(), end.getY(), PaintUtil.defaultPaint());
-    }
-
-    public LineChart setData(List<ChartPoint> originalData) {
-        this.points = originalData;
-        return this;
     }
 
     @NonNull
@@ -147,66 +205,12 @@ public class LineChart extends View {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, this.getResources().getDisplayMetrics());
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int parentWidth = this.getRootView().getWidth();
-
-        float half = parentWidth / 2;
-        paddingX = half;
-        space = (parentWidth / qtdPerScreen);
-        if (points == null) {
-            this.width = (float) parentWidth;
-        } else {
-            this.width = calWidth(paddingX);
-        }
-        height = new Float(MeasureSpec.getSize(heightMeasureSpec));
-        this.setMeasuredDimension(this.width.intValue(), height.intValue());
-    }
-
     private float calWidth(float padding) {
-        return ((points.size() - 1) * space) + (padding*2);
+        return ((points.size() - 1) * space) + (padding * 2);
     }
 
-    public List<ChartPoint> getPoints() {
-        return points;
-    }
-
-    public float width(){
-        return this.width;
-    }
-
-    public float padding() {
-        return paddingX;
-    }
-
-    public ChartPoint point(int position) {
-        ChartPoint chartPoint = this.points.get(position);
-        if(chartPoint == null){
-            return null;
-        }
-        return chartPoint;
-    }
-
-    public float maxX() {
-        float max = 0;
-        for(ChartPoint point : this.points){
-            if(max < point.getX()){
-                max = point.getX();
-            }
-        }
-        return max;
-    }
-
-    private float maxY() {
-        float max = 0;
-        for (ChartPoint point : this.points) {
-            Double value = point.getOriginalValue();
-            if (max < value.floatValue()) {
-                max = value.floatValue();
-            }
-        }
-        return max;
+    public int paddingScreen(){
+        return this.circleRadius + paddingScreenCircle;
     }
 }
 

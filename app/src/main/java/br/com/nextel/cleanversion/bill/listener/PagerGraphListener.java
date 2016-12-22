@@ -1,6 +1,8 @@
 package br.com.nextel.cleanversion.bill.listener;
 
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 
@@ -12,7 +14,7 @@ import br.com.nextel.cleanversion.bill.chart.LineChart;
 /**
  * Created by renato.soares on 12/22/16.
  */
-public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewTreeObserver.OnScrollChangedListener {
+public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewTreeObserver.OnScrollChangedListener, View.OnTouchListener {
     private LineChart lineChart;
     private HorizontalScrollView scrollView;
 
@@ -27,10 +29,8 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
 
     @Override
     public void onPageSelected(int position) {
-        ChartPoint chartPoint = this.lineChart.point(position);
-        float max = this.lineChart.maxX();
-        int x = discoverScrollX(chartPoint.getX() - lineChart.padding(), max, lineChart.width());
-        scrollView.smoothScrollTo(x, 0);
+        int calcScroll = (int) (this.lineChart.padding() * position) - position * (this.lineChart.paddingScreen());
+        scrollView.smoothScrollTo(calcScroll, 0);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
 
     }
 
-    private int discoverScrollX(float actual, float maxValue, float maxScroll){
-        return (int) (actual * maxScroll / maxValue);
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
     }
-
 }
