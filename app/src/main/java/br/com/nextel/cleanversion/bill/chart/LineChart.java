@@ -76,34 +76,39 @@ public class LineChart extends View {
                 continue;
             }
             ChartPoint point = it.next();
+            if(first == null){
+
+            }
             if(position >= i) {
                 path.lineTo(point.getX(), point.getY());
-            }
-            if(position != i) {
-                drawText(canvas, point.getOriginalValue(), point);
-            } else {
-                path.lineTo(point.getX(), height);
-                path.lineTo(first.getX(), height);
-                path.lineTo(first.getX(), first.getY());
-                pulseCircle(canvas, point);
+                if(position != i) {
+                    drawText(canvas, point.getOriginalValue(), point);
+                } else {
+                    path.lineTo(point.getX(), height);
+                    path.lineTo(first.getX(), height);
+                    path.lineTo(first.getX(), first.getY());
+                    pulseCircle(canvas, point);
+                }
             }
             drawLine(canvas, last, point);
             drawCircle(canvas, last);
             last = point;
         }
-        if(position != 0) {
-            Paint paint = PaintUtil.pulsePaint();;
-            paint.setColor(Color.argb(20, 255, 255, 255));
-            paint.setStyle(Paint.Style.FILL);
-            canvas.drawPath(path, paint);
-
-            Paint strokePath = PaintUtil.pulsePaint();
-            strokePath.setColor(Color.argb(30, 255, 255, 255));
-            strokePath.setStyle(Paint.Style.STROKE);
-            canvas.drawPath(path, strokePath);
-        }
+        drawPath(canvas, path);
         drawCircle(canvas, last);
         invalidate();
+    }
+
+    private void drawPath(Canvas canvas, Path path) {
+        Paint paint = PaintUtil.pulsePaint();
+        paint.setColor(Color.argb(20, 255, 255, 255));
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawPath(path, paint);
+
+        Paint strokePath = PaintUtil.pulsePaint();
+        strokePath.setColor(Color.argb(30, 255, 255, 255));
+        strokePath.setStyle(Paint.Style.STROKE);
+        canvas.drawPath(path, strokePath);
     }
 
     private void pulseCircle(Canvas canvas, ChartPoint point) {
