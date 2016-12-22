@@ -20,9 +20,6 @@ import br.com.dextra.cleanversion.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BillPagerAdapter mDemoCollectionPagerAdapter;
-    private ViewPager mViewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,13 +29,14 @@ public class MainActivity extends AppCompatActivity {
         LineChart lineChart = (LineChart) findViewById(R.id.line_chart);
         lineChart.setData(hardCodedData());
 
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.pager);
+
         HorizontalScrollView horiz = (HorizontalScrollView) findViewById(R.id.scroll_line_chart);
-        PagerGraphListener listener = new PagerGraphListener(lineChart, horiz);
+        PagerGraphListener listener = new PagerGraphListener(mViewPager, lineChart, horiz);
         horiz.getViewTreeObserver().addOnScrollChangedListener(listener);
         horiz.setOnTouchListener(listener);
 
-        mDemoCollectionPagerAdapter = new BillPagerAdapter(getSupportFragmentManager(), lineChart.getPoints());
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        BillPagerAdapter mDemoCollectionPagerAdapter = new BillPagerAdapter(getSupportFragmentManager(), lineChart.getPoints());
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
         mViewPager.addOnPageChangeListener(listener);
     }
