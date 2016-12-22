@@ -33,10 +33,9 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
     @Override
     public void onPageSelected(int position) {
         int calcScroll = (int) (this.lineChart.padding() * position) - position * (this.lineChart.paddingScreen());
-        ObjectAnimator animator=ObjectAnimator.ofInt(scrollView, "scrollX", calcScroll);
+        ObjectAnimator animator = ObjectAnimator.ofInt(scrollView, "scrollX", calcScroll);
         animator.setDuration(400);
         animator.start();
-//        scrollView.smoothScrollTo(calcScroll, 0);
     }
 
     @Override
@@ -78,20 +77,15 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            boolean result = false;
-            try {
-                float diffX = e2.getX() - e1.getX();
-                if (Math.abs(diffX) > SWIPE_THRESHOLD) {
-                    if (diffX > 0) {
-                        onSwipeRight();
-                    } else {
-                        onSwipeLeft();
-                    }
+            float diffX = e2.getX() - e1.getX();
+            if (Math.abs(diffX) > SWIPE_THRESHOLD) {
+                if (diffX > 0) {
+                    onSwipeRight();
+                    return true;
                 }
-            } catch (Exception exception) {
-                exception.printStackTrace();
+                onSwipeLeft();
             }
-            return result;
+            return true;
         }
     }
 }
