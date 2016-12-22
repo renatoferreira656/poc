@@ -13,30 +13,41 @@
         android:layout_margin="5dp"
         android:background="@drawable/bill_card"
         android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:src="@drawable/checklist"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textColor="#000000"
+                android:textSize="14sp"
+                android:textColor="#646464"
                 android:text="O que foi contratado"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:textColor="#000000"
+                android:textSize="9sp"
+                android:textColor="#BCBCBC"
                 android:text="Plano 5gb+500min, Plano Familia..."/>
         </LinearLayout>
 
         <TextView
             android:id="@+id/actual_plan"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:layout_weight="2"
+            android:textSize="17sp"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
             android:textColor="#000000"/>
     </LinearLayout>
     <LinearLayout
@@ -47,63 +58,86 @@
         android:layout_margin="5dp"
         android:background="@drawable/bill_card"
         android:orientation="horizontal">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/phone"/>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:text="Utilizado alem do planejado"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="10sp"
-            android:textColor="#000000"
-            android:text="Radio, Chamadas Dentro da Area de Regi..."/>
-        </LinearLayout>
-        <TextView
-            android:id="@+id/beyond_planned"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="#000000"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="10dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/bill_card"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textColor="#000000"
+                android:textSize="14sp"
+                android:textColor="#646464"
+                android:text="Utilizado alem do planejado"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="9sp"
+                android:textColor="#BCBCBC"
+                android:text="Radio, Chamadas Dentro da Area de Regi..."/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/beyond_planned"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
+            android:textSize="17sp"
+            android:textColor="#000000"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/bill_card"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/three_dots"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#646464"
                 android:text="Outros Lancamento"/>
 
             <TextView
                 android:id="@+id/other_bills_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:textColor="#000000"
+                android:textSize="9sp"
+                android:textColor="#BCBCBC"
                 android:text="Juros, Muitas e Ajustes Credito"/>
         </LinearLayout>
         <TextView
             android:id="@+id/other_bills"
-            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:gravity="right"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:layout_weight="2"
+            android:textSize="17sp"
             android:textColor="#5FD1B1"/>
     </LinearLayout>
 </LinearLayout>
+

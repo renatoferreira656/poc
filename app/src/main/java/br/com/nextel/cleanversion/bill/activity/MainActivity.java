@@ -33,15 +33,17 @@ public class MainActivity extends AppCompatActivity {
         lineChart.setData(hardCodedData());
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.pager);
-
         HorizontalScrollView horiz = (HorizontalScrollView) findViewById(R.id.scroll_line_chart);
         PagerGraphListener listener = new PagerGraphListener(this, mViewPager, lineChart, horiz);
         horiz.getViewTreeObserver().addOnScrollChangedListener(listener);
         horiz.setOnTouchListener(listener);
 
-        BillPagerAdapter mDemoCollectionPagerAdapter = new BillPagerAdapter(getSupportFragmentManager(), lineChart.getPoints());
-        mViewPager.setAdapter(mDemoCollectionPagerAdapter);
+        BillPagerAdapter pagerAdpater = new BillPagerAdapter(getSupportFragmentManager(), lineChart.getPoints());
+        mViewPager.setAdapter(pagerAdpater);
         mViewPager.addOnPageChangeListener(listener);
+        mViewPager.setCurrentItem(pagerAdpater.getCount());
+
+        lineChart.scrollView(listener);
     }
 
     @NonNull
@@ -53,9 +55,6 @@ public class MainActivity extends AppCompatActivity {
         originalData.add(new ChartPoint(230.0, ChartPoint.Status.PAID, "OUT"));
         originalData.add(new ChartPoint(180.0, ChartPoint.Status.PAID, "NOV"));
         originalData.add(new ChartPoint(150.0, ChartPoint.Status.PENDING, "DEZ"));
-        originalData.add(new ChartPoint(50.0, ChartPoint.Status.PENDING, "JAN"));
-        originalData.add(new ChartPoint(10.0, ChartPoint.Status.PENDING, "FEV"));
-        originalData.add(new ChartPoint(90.0, ChartPoint.Status.PENDING, "MAR"));
         return originalData;
     }
 

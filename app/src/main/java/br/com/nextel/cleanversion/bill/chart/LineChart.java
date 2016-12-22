@@ -1,7 +1,6 @@
 package br.com.nextel.cleanversion.bill.chart;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,12 +9,14 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import br.com.nextel.cleanversion.bill.activity.PriceUtils;
+import br.com.nextel.cleanversion.bill.listener.PagerGraphListener;
 
 public class LineChart extends View {
 
@@ -36,6 +37,8 @@ public class LineChart extends View {
     List<Path> paths = new ArrayList<Path>();
     private Paint paintStrokePath;
     private Paint paintFillPath;
+
+    private PagerGraphListener pagerListener;
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -182,18 +185,17 @@ public class LineChart extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int parentWidth = this.getRootView().getWidth();
-
-        float half = parentWidth / 2;
+        int parentWidht = this.getRootView().getWidth();
+        float half = parentWidht / 2;
+        width = (float) parentWidht;
         paddingX = half;
         space = (int)(half - this.circleRadius - paddingScreenCircle);
-        if (points == null) {
-            this.width = (float) parentWidth;
-        } else {
+        if (points != null) {
             this.width = calWidth(paddingX);
         }
         height = new Float(MeasureSpec.getSize(heightMeasureSpec));
         this.setMeasuredDimension(this.width.intValue(), height.intValue());
+        this.pagerListener.onPageSelected(this.position);
     }
 
     private float maxY() {
@@ -255,6 +257,11 @@ public class LineChart extends View {
     public ChartPoint position(int position) {
         this.position = position;
         return this.points.get(position);
+    }
+
+    public LineChart scrollView(PagerGraphListener pagerListener){
+        this.pagerListener = pagerListener;
+        return this;
     }
 }
 
