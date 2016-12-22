@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -57,12 +58,16 @@ public class LineChart extends View {
         super.onDraw(canvas);
         convertDataToPoints();
         ChartPoint last = null;
+        ChartPoint first = null;
         Iterator<ChartPoint> it = points.iterator();
         int i = -1;
+        Path path = new Path();
         while(it.hasNext()){
             i++;
             if(last == null){
                 last = it.next();
+                first = last;
+                path.moveTo(last.getX(), last.getY());
                 if(position != i) {
                     drawText(canvas, last.getOriginalValue(), last);
                 } else {
@@ -71,14 +76,31 @@ public class LineChart extends View {
                 continue;
             }
             ChartPoint point = it.next();
+            if(position >= i) {
+                path.lineTo(point.getX(), point.getY());
+            }
             if(position != i) {
                 drawText(canvas, point.getOriginalValue(), point);
             } else {
+                path.lineTo(point.getX(), height);
+                path.lineTo(first.getX(), height);
+                path.lineTo(first.getX(), first.getY());
                 pulseCircle(canvas, point);
             }
             drawLine(canvas, last, point);
             drawCircle(canvas, last);
             last = point;
+        }
+        if(position != 0) {
+            Paint paint = PaintUtil.pulsePaint();;
+            paint.setColor(Color.argb(20, 255, 255, 255));
+            paint.setStyle(Paint.Style.FILL);
+            canvas.drawPath(path, paint);
+
+            Paint strokePath = PaintUtil.pulsePaint();
+            strokePath.setColor(Color.argb(30, 255, 255, 255));
+            strokePath.setStyle(Paint.Style.STROKE);
+            canvas.drawPath(path, strokePath);
         }
         drawCircle(canvas, last);
         invalidate();
@@ -155,7 +177,7 @@ public class LineChart extends View {
         return points;
     }
 
-    public float padding() {
+    public Float padding() {
         return paddingX;
     }
 
@@ -240,7 +262,7 @@ public class LineChart extends View {
         return ((points.size() - 1) * space) + (padding * 2);
     }
 
-    public int paddingScreen(){
+    public Integer paddingViewPort(){
         return this.circleRadius + paddingScreenCircle;
     }
 

@@ -48,7 +48,7 @@ public class PaintUtil {
             return pulsePaint;
         }
         pulsePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        pulsePaint.setStrokeWidth(3);
+        pulsePaint.setStrokeWidth(2);
         return pulsePaint;
     }
 }
