@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import br.com.nextel.cleanversion.bill.activity.PriceUtils;
+
 public class LineChart extends View {
 
     private final Float paddingY = convertDpToPixel(40f);
@@ -161,7 +163,7 @@ public class LineChart extends View {
         if(text == null){
             return;
         }
-        canvas.drawText(formatValueToText(text), point.getX() - 50, point.getY() - 30, PaintUtil.textPaint());
+        canvas.drawText(PriceUtils.formatValueToText(text), point.getX() - 50, point.getY() - 30, PaintUtil.textPaint());
     }
 
     public LineChart setData(List<ChartPoint> originalData) {
@@ -203,10 +205,6 @@ public class LineChart extends View {
             }
         }
         return max;
-    }
-
-    private String formatValueToText(Object text) {
-        return "R$ " + text.toString().replace(".", ",");
     }
 
     private void drawLine(Canvas canvas, ChartPoint initial, ChartPoint end) {
@@ -254,9 +252,9 @@ public class LineChart extends View {
         return this.circleRadius + paddingScreenCircle;
     }
 
-    public LineChart position(int position) {
+    public ChartPoint position(int position) {
         this.position = position;
-        return this;
+        return this.points.get(position);
     }
 }
 

@@ -7,45 +7,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import br.com.dextra.cleanversion.R;
+import br.com.nextel.cleanversion.bill.activity.PriceUtils;
 import br.com.nextel.cleanversion.bill.chart.ChartPoint;
 
 public class BillDescriptionFragment extends Fragment {
 
-    private ChartPoint chartPoint;
+    private ChartPoint point;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_collection_object, container, false);
-        if(this.chartPoint == null){
+        View rootView = inflater.inflate(R.layout.fragment_bill_description, container, false);
+        if(point == null){
             return rootView;
         }
-        TextView price = (TextView) rootView.findViewById(R.id.price_value);
-        price.setText(formatPriceToText(this.chartPoint.getOriginalValue()));
-
-        TextView cents = (TextView) rootView.findViewById(R.id.price_cents_value);
-        cents.setText(formatCentsToText(this.chartPoint.getOriginalValue()));
-
-
+        double text = point.getOriginalValue() * (3.0 / 6.0);
+        setText(rootView.findViewById(R.id.actual_plan), PriceUtils.formatValueToText(text));
+        text = point.getOriginalValue() * (1.0 / 6.0);
+        setText(rootView.findViewById(R.id.beyond_planned), PriceUtils.formatValueToText(text));
+        text = point.getOriginalValue() * (2.0 / 6.0);
+        setText(rootView.findViewById(R.id.other_bills), PriceUtils.formatValueToText(text));
         return rootView;
     }
 
-    private String formatCentsToText(Double originalValue) {
-        String text = originalValue.toString();
-        String cents = text.split("\\.")[1];
-        if(cents.length() < 2){
-            return cents + "0";
-        }
-        return cents;
+    private void setText(View view, String text) {
+        TextView textView = (TextView) view;
+        textView.setText(text);
     }
 
-    private String formatPriceToText(Double originalValue) {
-        String text = originalValue.toString();
-        return text.split("\\.")[0] + ",";
-    }
-
-    public Fragment init(ChartPoint chartPoint) {
-        this.chartPoint = chartPoint;
+    public BillDescriptionFragment init(ChartPoint point) {
+        this.point = point;
         return this;
     }
 }
