@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.support.v4.view.PagerTabStrip;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 
 public class BillPagerTabStrip extends PagerTabStrip {
     private static final String TAG = "PagerTabStrip";
@@ -34,9 +35,13 @@ public class BillPagerTabStrip extends PagerTabStrip {
         float half = (width / 2);
 
 
-        int i = 80;
-        int i1 = 45;
-        int r = 60;
+        int i = convertDpToPixel(40f).intValue();
+        int i1 = convertDpToPixel(22f).intValue();
+        int r = convertDpToPixel(30f).intValue();
         canvas.drawRoundRect(half - i, halfHeight - i + i1,half + i,halfHeight + i - i1, r, r,  paint);
+    }
+
+    private Float convertDpToPixel(Float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, this.getResources().getDisplayMetrics());
     }
 }

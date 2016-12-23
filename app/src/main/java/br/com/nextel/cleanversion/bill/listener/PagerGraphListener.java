@@ -56,9 +56,9 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
         animator.start();
         this.activity.changeDetails(point);
         if(oldPosition != null && position >= 0 && position < this.viewPager.getAdapter().getCount()){
-//            transition(this.lineChart.getPoints().get(this.oldPosition).status(), point.status());
+            transition(this.lineChart.getPoints().get(this.oldPosition).status(), point.status());
         } else {
-//            transition(point.status(), point.status());
+            transition(point.status(), point.status());
         }
         this.oldPosition = position;
     }
