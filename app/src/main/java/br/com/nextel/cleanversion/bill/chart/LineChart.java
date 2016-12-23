@@ -39,6 +39,7 @@ public class LineChart extends View {
     private Paint paintFillPath;
 
     private PagerGraphListener pagerListener;
+    private boolean notFill = false;
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -46,17 +47,21 @@ public class LineChart extends View {
         PaintUtil.setStrokeWidth(convertDpToPixel(2.5f).intValue());
 
         paintFillPath = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintFillPath.setStrokeWidth(convertDpToPixel(1f));
+        paintFillPath.setStrokeWidth(convertDpToPixel(10f));
         paintFillPath.setStyle(Paint.Style.FILL);
 
         paintStrokePath = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintFillPath.setStrokeWidth(convertDpToPixel(1f));
+        paintFillPath.setStrokeWidth(convertDpToPixel(10f));
         paintStrokePath.setStyle(Paint.Style.STROKE);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if(space < 0){
+            invalidate();
+            return;
+        }
         convertDataToPoints();
         drawAllLines(canvas);
         drawPath(canvas);
@@ -72,7 +77,6 @@ public class LineChart extends View {
             i++;
             if(last == null){
                 last = it.next();
-                calcPath(new ChartPoint(0, height), last);
                 if(position != i) {
                     drawText(canvas, last.getOriginalValue(), last);
                 }
@@ -82,7 +86,6 @@ public class LineChart extends View {
             if(position != i) {
                 drawText(canvas, point.getOriginalValue(), point);
             }
-            calcPath(last, point);
             drawLine(canvas, last, point);
             last = point;
         }
@@ -100,7 +103,11 @@ public class LineChart extends View {
     }
 
     private void drawPath(Canvas canvas){
+        if(this.paths.isEmpty()){
+            return;
+        }
         int i = 0;
+        notFill = true;
         for(Path path: this.paths) {
             int alpha = (i > position) ? 10 : 40;
             paintFillPath.setColor(Color.argb(alpha, 255, 255, 255));
@@ -112,7 +119,7 @@ public class LineChart extends View {
     }
 
     private void calcPath(ChartPoint init, ChartPoint end) {
-        if(paths.size() == points.size()){
+        if(notFill){
             return;
         }
         Path path = new Path();
@@ -219,9 +226,12 @@ public class LineChart extends View {
     private void convertDataToPoints() {
         float max = maxY();
         float i = paddingX;
+        ChartPoint old = new ChartPoint(0,this.height);
         for (ChartPoint point : points) {
             float yScreenPoint = discoverYScreenPoint(point.getOriginalValue(), max);
             point.setX(i).setY(addPaddingY(yScreenPoint));
+            calcPath(old, point);
+            old = point;
             i = i + space;
         }
     }

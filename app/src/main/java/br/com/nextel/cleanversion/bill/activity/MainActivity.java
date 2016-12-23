@@ -53,9 +53,6 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(pagerAdpater.getCount());
 
         lineChart.scrollView(listener);
-
-        BillPagerTabStrip tab = (BillPagerTabStrip) findViewById(R.id.pager_title_strip);
-
     }
 
     @NonNull
