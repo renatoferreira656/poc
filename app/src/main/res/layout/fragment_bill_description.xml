@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp"
+    android:padding="5dp"
     android:orientation="vertical"
     android:background="#F4F4F4">
     <LinearLayout
@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:paddingRight="1dp"
             android:src="@drawable/checklist"/>
         <LinearLayout
             android:layout_width="0dp"
@@ -63,6 +64,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingRight="1dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/phone"/>
         <LinearLayout
@@ -107,6 +109,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingRight="1dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/three_dots"/>
         <LinearLayout
