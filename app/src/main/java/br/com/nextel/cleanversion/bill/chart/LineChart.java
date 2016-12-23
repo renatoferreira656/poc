@@ -218,6 +218,17 @@ public class LineChart extends View {
         return max;
     }
 
+    private float minY() {
+        float min = 1000000000000000f;
+        for (ChartPoint point : this.points) {
+            Double value = point.getOriginalValue();
+            if (min > value.floatValue()) {
+                min = value.floatValue();
+            }
+        }
+        return min;
+    }
+
     private void drawLine(Canvas canvas, ChartPoint initial, ChartPoint end) {
         canvas.drawLine(initial.getX(), initial.getY(), end.getX(), end.getY(), PaintUtil.defaultPaint());
     }
@@ -225,10 +236,11 @@ public class LineChart extends View {
     @NonNull
     private void convertDataToPoints() {
         float max = maxY();
+        float min = minY();
         float i = paddingX;
         ChartPoint old = new ChartPoint(0,this.height);
         for (ChartPoint point : points) {
-            float yScreenPoint = discoverYScreenPoint(point.getOriginalValue(), max);
+            float yScreenPoint = discoverYScreenPoint(point.getOriginalValue(), max, min);
             point.setX(i).setY(addPaddingY(yScreenPoint));
             calcPath(old, point);
             old = point;
@@ -248,10 +260,12 @@ public class LineChart extends View {
         return y;
     }
 
-    private float discoverYScreenPoint(Double point, float maxValue) {
+    private float discoverYScreenPoint(Double point, float maxValue, float min) {
         float less = convertDpToPixel(point.floatValue());
         maxValue = convertDpToPixel(maxValue);
-        return height - (height * less / maxValue);
+        min = convertDpToPixel(min);
+        float convertedHeight = height * (less - min) / (maxValue - min);
+        return height  - convertedHeight;
     }
 
     private Float convertDpToPixel(Float value) {
