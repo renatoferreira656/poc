@@ -22,7 +22,6 @@ public class BillPagerTabStrip extends PagerTabStrip {
         super(context, attrs);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onDraw(Canvas canvas) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -38,7 +37,11 @@ public class BillPagerTabStrip extends PagerTabStrip {
         int i = convertDpToPixel(40f).intValue();
         int i1 = convertDpToPixel(22f).intValue();
         int r = convertDpToPixel(30f).intValue();
-        canvas.drawRoundRect(half - i, halfHeight - i + i1,half + i,halfHeight + i - i1, r, r,  paint);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            canvas.drawRoundRect(half - i, halfHeight - i + i1,half + i,halfHeight + i - i1, r, r,  paint);
+        } else {
+            canvas.drawRect(half - i, halfHeight - i + i1,half + i,halfHeight + i - i1,  paint);
+        }
     }
 
     private Float convertDpToPixel(Float value) {
