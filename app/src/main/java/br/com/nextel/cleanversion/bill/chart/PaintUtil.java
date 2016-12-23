@@ -1,8 +1,10 @@
 package br.com.nextel.cleanversion.bill.chart;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
+import android.util.TypedValue;
 
 import static android.R.attr.strokeWidth;
 
@@ -13,16 +15,20 @@ public class PaintUtil {
 
     private static Paint paintText;
     private static Paint paint;
-    private static Integer strokeWidth = 5;
+    private static Integer strokeWidth;
     private static Paint pulsePaint;
 
-    public static Paint textPaint() {
+    public static void setStrokeWidth(Integer strokeWidth) {
+        PaintUtil.strokeWidth = strokeWidth;
+    }
+
+    public static Paint textPaint(Context context) {
         if (paintText != null) {
             return paintText;
         }
         paintText = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintText.setColor(Color.argb(150, 255, 255, 255));
-        paintText.setTextSize(28);
+        paintText.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, context.getResources().getDisplayMetrics()));
         return paintText;
     }
 

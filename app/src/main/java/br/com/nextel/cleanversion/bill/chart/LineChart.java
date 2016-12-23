@@ -20,7 +20,7 @@ import br.com.nextel.cleanversion.bill.listener.PagerGraphListener;
 
 public class LineChart extends View {
 
-    private final Float paddingY = convertDpToPixel(40f);
+    private final Float paddingY = convertDpToPixel(25f);
     private Float paddingX;
 
     private List<ChartPoint> points = new ArrayList<>();
@@ -29,7 +29,7 @@ public class LineChart extends View {
     private Float height;
     private Integer paddingScreenCircle = 10;
 
-    private Integer circleRadius = 20;
+    private Integer circleRadius = convertDpToPixel(10f).intValue();
     private int position;
     private float radiusPosition = 0;
     private boolean open = true;
@@ -43,12 +43,14 @@ public class LineChart extends View {
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        PaintUtil.setStrokeWidth(convertDpToPixel(2.5f).intValue());
+
         paintFillPath = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintFillPath.setStrokeWidth(2);
+        paintFillPath.setStrokeWidth(convertDpToPixel(1f));
         paintFillPath.setStyle(Paint.Style.FILL);
 
         paintStrokePath = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintFillPath.setStrokeWidth(2);
+        paintFillPath.setStrokeWidth(convertDpToPixel(1f));
         paintStrokePath.setStyle(Paint.Style.STROKE);
     }
 
@@ -166,7 +168,7 @@ public class LineChart extends View {
         if(text == null){
             return;
         }
-        canvas.drawText(PriceUtils.formatValueToText(text), point.getX() - 50, point.getY() - 30, PaintUtil.textPaint());
+        canvas.drawText(PriceUtils.formatValueToText(text), point.getX() - 50, point.getY() - 30, PaintUtil.textPaint(this.getContext()));
     }
 
     public LineChart setData(List<ChartPoint> originalData) {
@@ -229,7 +231,7 @@ public class LineChart extends View {
             return y + paddingY;
         }
 
-        if (y > height - paddingY) {
+        if (y > height - paddingY + convertDpToPixel(10f)) {
             return y - paddingY;
         }
 

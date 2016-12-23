@@ -10,7 +10,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="7"
+            android:layout_weight="6"
             android:id="@+id/bill_graph_holder"
             android:background="@drawable/red_green_transition"
             android:orientation="vertical">
@@ -19,8 +19,8 @@
                 android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="3"
-                android:paddingTop="20dp">
+                android:layout_weight="4"
+                android:paddingTop="10dp">
 
             <br.com.nextel.cleanversion.bill.pager.BillPagerTabStrip
                 android:id="@+id/pager_title_strip"
@@ -33,7 +33,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2"
+                android:layout_weight="5"
                 android:orientation="vertical">
                 <HorizontalScrollView
                     android:id="@+id/scroll_line_chart"
@@ -53,7 +53,7 @@
         android:id="@+id/bill_description"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6"
+        android:layout_weight="4"
         android:orientation="vertical">
 
     </LinearLayout>
