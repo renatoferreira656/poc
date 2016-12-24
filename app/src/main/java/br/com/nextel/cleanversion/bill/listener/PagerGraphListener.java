@@ -50,6 +50,7 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
         if(paddingViewPort == null || padding == null){
             return;
         }
+        padding = padding /2;
         int calcScroll = (int) (padding * position) - position * paddingViewPort;
         ObjectAnimator animator = ObjectAnimator.ofInt(scrollView, "scrollX", calcScroll);
         animator.setDuration(400);

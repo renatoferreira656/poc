@@ -198,7 +198,7 @@ public class LineChart extends View {
         float half = parentWidht / 2;
         width = (float) parentWidht;
         paddingX = half;
-        space = (int)(half - this.circleRadius - paddingScreenCircle);
+        space = (int)((half / 2) - this.circleRadius);
         if (points != null) {
             this.width = calWidth(paddingX);
         }
