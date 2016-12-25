@@ -187,24 +187,28 @@ public class LineChart extends View {
         return points;
     }
 
-    public Float padding() {
-        return paddingX;
-    }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int visiblePoints = 5;
         int parentWidht = this.getRootView().getWidth();
         float half = parentWidht / 2;
         width = (float) parentWidht;
         paddingX = half;
-        space = (int)((half / 2) - this.circleRadius);
+        space = (int) (width / visiblePoints);
         if (points != null) {
             this.width = calWidth(paddingX);
         }
         height = new Float(MeasureSpec.getSize(heightMeasureSpec));
         this.setMeasuredDimension(this.width.intValue(), height.intValue());
         this.pagerListener.onPageSelected(this.position);
+    }
+
+    public Integer calcScroll(int position) {
+        if(space == null){
+            return null;
+        }
+        return (int) (space * position);
     }
 
     private float maxY() {
@@ -274,10 +278,6 @@ public class LineChart extends View {
 
     private float calWidth(float padding) {
         return ((points.size() - 1) * space) + (padding * 2);
-    }
-
-    public Integer paddingViewPort(){
-        return this.circleRadius + paddingScreenCircle;
     }
 
     public ChartPoint position(int position) {

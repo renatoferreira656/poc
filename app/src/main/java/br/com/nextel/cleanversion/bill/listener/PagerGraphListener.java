@@ -44,14 +44,11 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
 
     @Override
     public void onPageSelected(int position) {
-        Integer paddingViewPort = this.lineChart.paddingViewPort();
-        Float padding = this.lineChart.padding();
-        ChartPoint point = this.lineChart.position(position);
-        if(paddingViewPort == null || padding == null){
+        Integer calcScroll = this.lineChart.calcScroll(position);
+        if(calcScroll == null){
             return;
         }
-        padding = padding /2;
-        int calcScroll = (int) (padding * position) - position * paddingViewPort;
+        ChartPoint point = this.lineChart.position(position);
         ObjectAnimator animator = ObjectAnimator.ofInt(scrollView, "scrollX", calcScroll);
         animator.setDuration(400);
         animator.start();
