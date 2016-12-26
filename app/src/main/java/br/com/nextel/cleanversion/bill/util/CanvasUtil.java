@@ -25,7 +25,7 @@ public class CanvasUtil {
 
     public static void context(Context context){
         CanvasUtil.context = context;
-        paddingY = CanvasUtil.convertDpToPixel(25f);
+        paddingY = CanvasUtil.convertDpToPixel(40f);
     }
 
     public static class PulsePoint {

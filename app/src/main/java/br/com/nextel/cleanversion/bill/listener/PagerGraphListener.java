@@ -1,27 +1,18 @@
 package br.com.nextel.cleanversion.bill.listener;
 
-import android.animation.ObjectAnimator;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
-import android.widget.ScrollView;
 
 import br.com.nextel.cleanversion.bill.activity.BillHomeActivity;
 import br.com.nextel.cleanversion.bill.chart.ChartPoint;
-import br.com.nextel.cleanversion.bill.chart.ChartPointStatus;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
 import br.com.nextel.cleanversion.bill.pager.BillPagerTabStrip;
 import br.com.nextel.cleanversion.bill.util.AnimationUtil;
 
-/**
- * Created by renato.soares on 12/22/16.
- */
 public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewTreeObserver.OnScrollChangedListener,
         View.OnTouchListener, GraphEventListener {
     private GestureDetector gestureDetector;
