@@ -33,7 +33,6 @@ public class LineChart extends View {
     private Paint paintStrokePath;
     private Paint paintFillPath;
 
-    private boolean notFill = false;
     private ScrollListener scrollListener;
     private CanvasUtil.PulsePoint pulsePoint;
 
@@ -91,7 +90,6 @@ public class LineChart extends View {
             return;
         }
         int i = 0;
-        notFill = true;
         for(Path path: this.paths) {
             int alpha = (i > position) ? 10 : 40;
             paintFillPath.setColor(Color.argb(alpha, 255, 255, 255));
@@ -124,9 +122,9 @@ public class LineChart extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int visiblePoints = 5;
-        int parentWidht = this.getRootView().getWidth();
-        float half = parentWidht / 2;
-        width = (float) parentWidht;
+        int parentWidth = this.getRootView().getWidth();
+        float half = parentWidth / 2;
+        width = (float) parentWidth;
         if(width < 1){
             return;
         }
