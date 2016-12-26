@@ -23,6 +23,7 @@ public class BillPagerTabStrip extends HorizontalScrollView {
 
     private Integer width;
     private LinearLayout linearLayout;
+    private int position;
 
     public BillPagerTabStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,7 +31,7 @@ public class BillPagerTabStrip extends HorizontalScrollView {
 
     private void addViews() {
         PagerAdapter adapter = this.viewPager.getAdapter();
-        int width = this.width / 5;
+        int width = getTextWidth();
         linearLayout = new LinearLayout(this.getContext());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
@@ -46,6 +47,10 @@ public class BillPagerTabStrip extends HorizontalScrollView {
         }
         linearLayout.addView(this.newText("", width));
         linearLayout.addView(this.newText("", width));
+    }
+
+    private int getTextWidth() {
+        return this.width / 5;
     }
 
     @Override
@@ -70,7 +75,7 @@ public class BillPagerTabStrip extends HorizontalScrollView {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.argb(40, 255, 255, 255));
         float halfHeight = getHeight() / 2;
-        float half = (getWidth() / 2);
+        float half = (getTextWidth() * (position + 2)) + (getTextWidth() / 2);
         int i = convertDpToPixel(40f).intValue();
         int i1 = convertDpToPixel(22f).intValue();
         int r = convertDpToPixel(30f).intValue();
@@ -103,8 +108,9 @@ public class BillPagerTabStrip extends HorizontalScrollView {
         }
         View childAt = this.linearLayout.getChildAt(position);
         if(childAt == null){
-            return 0;
+            return this.width * position;
         }
+        this.position = position;
         return childAt.getLeft();
     }
 }

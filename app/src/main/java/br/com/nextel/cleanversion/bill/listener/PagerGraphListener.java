@@ -61,7 +61,7 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
             transition(point.status(), point.status());
         }
 
-        this.headerTab.scrollTo(this.headerTab.scrollChild(position), 0);
+        this.headerTab.smoothScrollTo(this.headerTab.scrollChild(position), 0);
         this.oldPosition = position;
     }
 

@@ -5,12 +5,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 
 import java.util.ArrayList;
@@ -21,7 +19,6 @@ import br.com.nextel.cleanversion.bill.chart.ChartPointStatus;
 import br.com.nextel.cleanversion.bill.fragment.BillDescriptionFragment;
 import br.com.nextel.cleanversion.bill.listener.LineChartListener;
 import br.com.nextel.cleanversion.bill.listener.PagerGraphListener;
-import br.com.nextel.cleanversion.bill.listener.TabStripListener;
 import br.com.nextel.cleanversion.bill.pager.BillPagerAdapter;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
 import br.com.dextra.cleanversion.R;
@@ -30,36 +27,60 @@ import br.com.nextel.cleanversion.bill.pager.BillPagerTabStrip;
 public class BillHomeActivity extends AppCompatActivity {
 
     private View graphHolderView;
+    private LineChart lineChart;
+    private ViewPager mViewPager;
+    private BillPagerTabStrip tabStrip;
+    private HorizontalScrollView chartHorizontal;
+    private PagerGraphListener pagerGraph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         graphHolderView = findViewById(R.id.bill_graph_holder);
+
         getSupportActionBar().setTitle("Fatura Digital");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF6F00")));
-        LineChart lineChart = (LineChart) findViewById(R.id.line_chart);
-        lineChart.setData(hardCodedData());
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.pager);
+        lineChart = (LineChart) findViewById(R.id.line_chart);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        tabStrip = (BillPagerTabStrip) findViewById(R.id.pager_title_strip);
+        chartHorizontal = (HorizontalScrollView) findViewById(R.id.scroll_line_chart);
 
-        BillPagerTabStrip strip = (BillPagerTabStrip) findViewById(R.id.pager_title_strip);
-        strip.setViewPager(mViewPager);
-        strip.setOnTouchListener(new TabStripListener());
 
-        HorizontalScrollView horiz = (HorizontalScrollView) findViewById(R.id.scroll_line_chart);
-        PagerGraphListener listener = new PagerGraphListener(this, mViewPager, lineChart, horiz, strip);
-        horiz.getViewTreeObserver().addOnScrollChangedListener(listener);
-        horiz.setOnTouchListener(listener);
+        initTabStrip();
+        configureDataChart();
+        configureViewPager();
+
+
+    }
+
+    private void configureDataChart() {
         lineChart.setOnTouchListener(new LineChartListener(mViewPager, lineChart));
+        lineChart.setData(hardCodedData());
+        lineChart.scrollView(getChartListener());
+        chartHorizontal.getViewTreeObserver().addOnScrollChangedListener(getChartListener());
+        chartHorizontal.setOnTouchListener(getChartListener());
 
+    }
+
+    private void initTabStrip() {
+        tabStrip.setOnTouchListener(getChartListener());
+        tabStrip.setViewPager(mViewPager);
+    }
+
+    private void configureViewPager() {
         BillPagerAdapter pagerAdpater = new BillPagerAdapter(getSupportFragmentManager(), lineChart.getPoints());
         mViewPager.setAdapter(pagerAdpater);
-        mViewPager.addOnPageChangeListener(listener);
+        mViewPager.addOnPageChangeListener(getChartListener());
         mViewPager.setCurrentItem(pagerAdpater.getCount());
+    }
 
-        lineChart.scrollView(listener);
-
+    @NonNull
+    private PagerGraphListener getChartListener() {
+        if (pagerGraph == null) {
+            pagerGraph = new PagerGraphListener(this, mViewPager, lineChart, chartHorizontal, tabStrip);
+        }
+        return pagerGraph;
     }
 
     @NonNull
