@@ -19,18 +19,15 @@ import br.com.nextel.cleanversion.bill.util.PaintUtil;
 
 public class LineChart extends View {
 
-    private final Float paddingY = CanvasUtil.convertDpToPixel(LineChart.this.getContext(), 25f);
     private Float paddingX;
 
     private List<ChartPoint> points = new ArrayList<>();
-    private Integer space = 40;
+    private Float space = 40f;
     private Float width;
     private Float height;
 
-    private Integer circleRadius = CanvasUtil.convertDpToPixel(LineChart.this.getContext(), 10f).intValue();
+    private Integer circleRadius;
     private int position;
-    private float radiusPosition = 0;
-    private boolean open = true;
 
     List<Path> paths = new ArrayList<Path>();
     private Paint paintStrokePath;
@@ -42,15 +39,17 @@ public class LineChart extends View {
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
+        CanvasUtil.context(context);
+        circleRadius = CanvasUtil.convertDpToPixel(10f).intValue();
 
-        PaintUtil.setStrokeWidth(CanvasUtil.convertDpToPixel(LineChart.this.getContext(),2.5f).intValue());
+        PaintUtil.setStrokeWidth(CanvasUtil.convertDpToPixel(2.5f).intValue());
 
         paintFillPath = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintFillPath.setStrokeWidth(CanvasUtil.convertDpToPixel(LineChart.this.getContext(),10f));
+        paintFillPath.setStrokeWidth(CanvasUtil.convertDpToPixel(10f));
         paintFillPath.setStyle(Paint.Style.FILL);
 
         paintStrokePath = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintFillPath.setStrokeWidth(CanvasUtil.convertDpToPixel(LineChart.this.getContext(), 10f));
+        paintFillPath.setStrokeWidth(CanvasUtil.convertDpToPixel(10f));
         paintStrokePath.setStyle(Paint.Style.STROKE);
         pulsePoint = new CanvasUtil.PulsePoint(this.circleRadius);
     }
@@ -62,34 +61,19 @@ public class LineChart extends View {
             invalidate();
             return;
         }
-        convertDataToPoints();
-        drawAllLines(canvas);
+        CanvasUtil.drawLines(canvas, this.points, this.position);
         drawPath(canvas);
         drawAllCircles(canvas);
         invalidate();
     }
 
-    private void drawAllLines(Canvas canvas) {
-        ChartPoint last = null;
-        Iterator<ChartPoint> it = points.iterator();
-        int i = -1;
-        while(it.hasNext()){
-            i++;
-            if(last == null){
-                last = it.next();
-                if(position != i) {
-                    CanvasUtil.drawText(this.getContext(), canvas, last.getOriginalValue(), last);
-                }
-                continue;
-            }
-            ChartPoint point = it.next();
-            if(position != i) {
-                CanvasUtil.drawText(this.getContext(), canvas, point.getOriginalValue(), point);
-            }
-            CanvasUtil.drawLine(canvas, last, point);
-            last = point;
+    public Integer calcScroll(int position) {
+        if(space == null){
+            return null;
         }
+        return (int) (space * position);
     }
+
 
     private void drawAllCircles(Canvas canvas) {
         int i= 0;
@@ -97,7 +81,7 @@ public class LineChart extends View {
             if(position == i) {
                 CanvasUtil.pulseCircle(canvas, point, pulsePoint);
             }
-            CanvasUtil.drawCircle(this.getContext(), canvas, point, this.circleRadius);
+            CanvasUtil.drawCircle(canvas, point, this.circleRadius);
             i++;
         }
     }
@@ -116,19 +100,6 @@ public class LineChart extends View {
             canvas.drawPath(path, paintStrokePath);
             i++;
         }
-    }
-
-    private void calcPath(ChartPoint init, ChartPoint end) {
-        if(notFill){
-            return;
-        }
-        Path path = new Path();
-        path.moveTo(init.getX(), init.getY());
-        path.lineTo(end.getX(), end.getY());
-        path.lineTo(end.getX(), height);
-        path.lineTo(init.getX(), height);
-        path.lineTo(init.getX(), init.getY());
-        paths.add(path);
     }
 
     public LineChart setData(List<ChartPoint> originalData) {
@@ -160,47 +131,17 @@ public class LineChart extends View {
             return;
         }
         paddingX = half;
-        space = (int) (width / visiblePoints);
+        space = (width / visiblePoints);
         if (points != null) {
             this.width = calWidth(paddingX);
         }
         height = new Float(MeasureSpec.getSize(heightMeasureSpec));
         this.setMeasuredDimension(this.width.intValue(), height.intValue());
         this.scrollListener.graph(true);
+        CanvasUtil.convertDataToPoints(points, space, paddingX, height);
+        this.paths = CanvasUtil.calcPaths(height, points);
     }
 
-    public Integer calcScroll(int position) {
-        if(space == null){
-            return null;
-        }
-        return (int) (space * position);
-    }
-
-    @NonNull
-    private void convertDataToPoints() {
-        float max = ChartPoint.maxY(points);
-        float min = ChartPoint.minY(points);
-        float i = paddingX;
-        ChartPoint old = new ChartPoint(0,this.height);
-        for (ChartPoint point : points) {
-            float yScreenPoint = CanvasUtil.discoverYScreenPoint(this.getContext(), height, point.getOriginalValue(), max, min);
-            point.setX(i).setY(addPaddingY(yScreenPoint));
-            calcPath(old, point);
-            old = point;
-            i = i + space;
-        }
-    }
-
-    private float addPaddingY(float y) {
-        if (y < paddingY) {
-            return y + paddingY;
-        }
-
-        if (y > height - paddingY + CanvasUtil.convertDpToPixel(this.getContext(), 10f)) {
-            return y - paddingY;
-        }
-        return y;
-    }
 
     private float calWidth(float padding) {
         return ((points.size() - 1) * space) + (padding * 2);
