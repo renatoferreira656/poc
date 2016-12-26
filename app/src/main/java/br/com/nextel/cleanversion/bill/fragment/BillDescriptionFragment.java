@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import br.com.dextra.cleanversion.R;
-import br.com.nextel.cleanversion.bill.activity.PriceUtils;
+import br.com.nextel.cleanversion.bill.util.PriceUtils;
 import br.com.nextel.cleanversion.bill.chart.ChartPoint;
 
 public class BillDescriptionFragment extends Fragment {

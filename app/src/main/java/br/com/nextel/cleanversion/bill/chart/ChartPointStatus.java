@@ -8,12 +8,12 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
 import br.com.dextra.cleanversion.R;
+import br.com.nextel.cleanversion.bill.util.PaintUtil;
 
 public enum ChartPointStatus {
     PAID("#5ACD76", R.drawable.ok, R.drawable.bill_graph_green_gradient),
     OVERDUE("#C43C3C", R.drawable.alert, R.drawable.bill_graph_red_gradient),
-    PENDING("#F6F913", R.drawable.ok, R.drawable.bill_graph_yellow_gradient),
-    LATE_PAID("#FFFFFF", R.drawable.alert, R.drawable.bill_graph_green_gradient);
+    PENDING("#F6F913", R.drawable.ok, R.drawable.bill_graph_yellow_gradient);
 
     private Paint paint;
     private int bitmapRes;

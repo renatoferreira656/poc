@@ -1,4 +1,4 @@
-package br.com.nextel.cleanversion.bill.activity;
+package br.com.nextel.cleanversion.bill.util;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.util.TypedValue;
 
 import br.com.nextel.cleanversion.bill.chart.ChartPoint;
-import br.com.nextel.cleanversion.bill.chart.PaintUtil;
 
 /**
  * Created by renato.soares on 12/26/16.
@@ -57,14 +56,14 @@ public class CanvasUtil {
         canvas.drawLine(initial.getX(), initial.getY(), end.getX(), end.getY(), PaintUtil.defaultPaint());
     }
 
-    public static void drawCircle(Context context, Canvas canvas, ChartPoint point, Float radius) {
+    public static void drawCircle(Context context, Canvas canvas, ChartPoint point, Integer radius) {
         if(point == null){
             return;
         }
         canvas.drawCircle(point.getX(), point.getY(), radius, PaintUtil.defaultPaint());
         canvas.drawCircle(point.getX(), point.getY(), radius - 4, point.getStatusPaint());
 
-        int diff = (int) (radius / 2);
+        int diff = radius / 2;
         canvas.drawBitmap(point.status().bitmap(context), point.getX() - diff, point.getY() - diff, PaintUtil.defaultPaint());
     }
 

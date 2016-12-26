@@ -13,8 +13,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import br.com.nextel.cleanversion.bill.activity.CanvasUtil;
+import br.com.nextel.cleanversion.bill.util.CanvasUtil;
 import br.com.nextel.cleanversion.bill.listener.ScrollListener;
+import br.com.nextel.cleanversion.bill.util.PaintUtil;
 
 public class LineChart extends View {
 
@@ -96,7 +97,7 @@ public class LineChart extends View {
             if(position == i) {
                 CanvasUtil.pulseCircle(canvas, point, pulsePoint);
             }
-            CanvasUtil.drawCircle(this.getContext(), canvas, point, this.radiusPosition);
+            CanvasUtil.drawCircle(this.getContext(), canvas, point, this.circleRadius);
             i++;
         }
     }

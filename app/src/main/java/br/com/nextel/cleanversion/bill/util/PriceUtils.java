@@ -1,4 +1,4 @@
-package br.com.nextel.cleanversion.bill.activity;
+package br.com.nextel.cleanversion.bill.util;
 
 import java.text.DecimalFormat;
 

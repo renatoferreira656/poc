@@ -1,12 +1,9 @@
-package br.com.nextel.cleanversion.bill.chart;
+package br.com.nextel.cleanversion.bill.util;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
 import android.util.TypedValue;
-
-import static android.R.attr.strokeWidth;
 
 /**
  * Created by renato.soares on 12/22/16.
