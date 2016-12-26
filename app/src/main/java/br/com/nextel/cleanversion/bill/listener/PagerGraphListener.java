@@ -14,7 +14,7 @@ import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 
 import br.com.dextra.cleanversion.R;
-import br.com.nextel.cleanversion.bill.activity.MainActivity;
+import br.com.nextel.cleanversion.bill.activity.BillHomeActivity;
 import br.com.nextel.cleanversion.bill.chart.ChartPoint;
 import br.com.nextel.cleanversion.bill.chart.ChartPointStatus;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
@@ -24,13 +24,13 @@ import br.com.nextel.cleanversion.bill.chart.LineChart;
  */
 public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewTreeObserver.OnScrollChangedListener, View.OnTouchListener, GraphEventListener {
     private GestureDetector gestureDetector;
-    private MainActivity activity;
+    private BillHomeActivity activity;
     private ViewPager viewPager;
     private LineChart lineChart;
     private HorizontalScrollView scrollView;
     private Integer oldPosition;
 
-    public PagerGraphListener(MainActivity activity, ViewPager viewPager, LineChart lineChart, HorizontalScrollView scrollView) {
+    public PagerGraphListener(BillHomeActivity activity, ViewPager viewPager, LineChart lineChart, HorizontalScrollView scrollView) {
         this.activity = activity;
         this.viewPager = viewPager;
         this.lineChart = lineChart;

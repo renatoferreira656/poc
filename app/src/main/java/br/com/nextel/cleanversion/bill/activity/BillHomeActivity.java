@@ -26,7 +26,7 @@ import br.com.nextel.cleanversion.bill.chart.LineChart;
 import br.com.dextra.cleanversion.R;
 import br.com.nextel.cleanversion.bill.pager.BillPagerTabStrip;
 
-public class MainActivity extends AppCompatActivity {
+public class BillHomeActivity extends AppCompatActivity {
 
     private View graphHolderView;
 

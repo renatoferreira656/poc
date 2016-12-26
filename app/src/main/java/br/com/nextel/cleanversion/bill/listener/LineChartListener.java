@@ -1,19 +1,11 @@
 package br.com.nextel.cleanversion.bill.listener;
 
-import android.animation.ObjectAnimator;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.HorizontalScrollView;
 
-import br.com.nextel.cleanversion.bill.activity.MainActivity;
 import br.com.nextel.cleanversion.bill.chart.ChartPoint;
-import br.com.nextel.cleanversion.bill.chart.ChartPointStatus;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
 
 /**

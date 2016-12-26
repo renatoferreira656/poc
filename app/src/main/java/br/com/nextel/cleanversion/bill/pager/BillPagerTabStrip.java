@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,8 +21,8 @@ public class BillPagerTabStrip extends HorizontalScrollView {
     private static final String TAG = "PagerTabStrip";
     private ViewPager viewPager;
 
-    private final PageListener mPageListener = new PageListener();
     private Integer width;
+    private LinearLayout linearLayout;
 
     public BillPagerTabStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,18 +31,21 @@ public class BillPagerTabStrip extends HorizontalScrollView {
     private void addViews() {
         PagerAdapter adapter = this.viewPager.getAdapter();
         int width = this.width / 5;
-        LinearLayout linearLayout = new LinearLayout(this.getContext());
-        System.out.println("franguinho" + width);
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        linearLayout = new LinearLayout(this.getContext());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
         linearLayout.setLayoutParams(lp);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         this.addView(linearLayout);
 
+        linearLayout.addView(this.newText("", width));
+        linearLayout.addView(this.newText("", width));
         for (int i =0; i<adapter.getCount(); i++){
             CharSequence text = adapter.getPageTitle(i);
             linearLayout.addView(this.newText(text, width));
         }
+        linearLayout.addView(this.newText("", width));
+        linearLayout.addView(this.newText("", width));
     }
 
     @Override
@@ -64,14 +68,8 @@ public class BillPagerTabStrip extends HorizontalScrollView {
     protected void onDraw(Canvas canvas) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.argb(40, 255, 255, 255));
-        final int height = getHeight();
-
-        float halfHeight = height / 2;
-
-        int width = getWidth();
-        float half = (width / 2);
-
-
+        float halfHeight = getHeight() / 2;
+        float half = (getWidth() / 2);
         int i = convertDpToPixel(40f).intValue();
         int i1 = convertDpToPixel(22f).intValue();
         int r = convertDpToPixel(30f).intValue();
@@ -80,6 +78,7 @@ public class BillPagerTabStrip extends HorizontalScrollView {
         } else {
             canvas.drawRect(half - i, halfHeight - i + i1,half + i,halfHeight + i - i1,  paint);
         }
+        invalidate();
     }
 
     private Float convertDpToPixel(Float value) {
@@ -97,20 +96,9 @@ public class BillPagerTabStrip extends HorizontalScrollView {
         return child;
     }
 
-    private class PageListener implements  ViewPager.OnPageChangeListener {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
+    private void updateScroll(Integer position){
+        View view = linearLayout.getChildAt(position + 2);
+        scrollTo(view.getLeft(), 0);
     }
+
 }
