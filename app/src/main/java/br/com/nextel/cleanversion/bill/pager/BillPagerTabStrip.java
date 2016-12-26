@@ -60,8 +60,9 @@ public class BillPagerTabStrip extends HorizontalScrollView {
         }
     }
 
-    public void setViewPager(ViewPager viewPager) {
+    public BillPagerTabStrip setViewPager(ViewPager viewPager) {
         this.viewPager = viewPager;
+        return this;
     }
 
     @Override
@@ -96,9 +97,14 @@ public class BillPagerTabStrip extends HorizontalScrollView {
         return child;
     }
 
-    private void updateScroll(Integer position){
-        View view = linearLayout.getChildAt(position + 2);
-        scrollTo(view.getLeft(), 0);
+    public int scrollChild(int position) {
+        if(this.linearLayout == null){
+            return 0;
+        }
+        View childAt = this.linearLayout.getChildAt(position);
+        if(childAt == null){
+            return 0;
+        }
+        return childAt.getLeft();
     }
-
 }

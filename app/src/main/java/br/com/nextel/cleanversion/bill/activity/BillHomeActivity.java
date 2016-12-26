@@ -21,6 +21,7 @@ import br.com.nextel.cleanversion.bill.chart.ChartPointStatus;
 import br.com.nextel.cleanversion.bill.fragment.BillDescriptionFragment;
 import br.com.nextel.cleanversion.bill.listener.LineChartListener;
 import br.com.nextel.cleanversion.bill.listener.PagerGraphListener;
+import br.com.nextel.cleanversion.bill.listener.TabStripListener;
 import br.com.nextel.cleanversion.bill.pager.BillPagerAdapter;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
 import br.com.dextra.cleanversion.R;
@@ -41,8 +42,13 @@ public class BillHomeActivity extends AppCompatActivity {
         LineChart lineChart = (LineChart) findViewById(R.id.line_chart);
         lineChart.setData(hardCodedData());
         ViewPager mViewPager = (ViewPager) findViewById(R.id.pager);
+
+        BillPagerTabStrip strip = (BillPagerTabStrip) findViewById(R.id.pager_title_strip);
+        strip.setViewPager(mViewPager);
+        strip.setOnTouchListener(new TabStripListener());
+
         HorizontalScrollView horiz = (HorizontalScrollView) findViewById(R.id.scroll_line_chart);
-        PagerGraphListener listener = new PagerGraphListener(this, mViewPager, lineChart, horiz);
+        PagerGraphListener listener = new PagerGraphListener(this, mViewPager, lineChart, horiz, strip);
         horiz.getViewTreeObserver().addOnScrollChangedListener(listener);
         horiz.setOnTouchListener(listener);
         lineChart.setOnTouchListener(new LineChartListener(mViewPager, lineChart));
@@ -54,8 +60,6 @@ public class BillHomeActivity extends AppCompatActivity {
 
         lineChart.scrollView(listener);
 
-        BillPagerTabStrip strip = (BillPagerTabStrip) findViewById(R.id.pager_title_strip);
-        strip.setViewPager(mViewPager);
     }
 
     @NonNull

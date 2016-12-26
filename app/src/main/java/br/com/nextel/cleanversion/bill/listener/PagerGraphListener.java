@@ -1,11 +1,9 @@
 package br.com.nextel.cleanversion.bill.listener;
 
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -13,29 +11,33 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 
-import br.com.dextra.cleanversion.R;
 import br.com.nextel.cleanversion.bill.activity.BillHomeActivity;
 import br.com.nextel.cleanversion.bill.chart.ChartPoint;
 import br.com.nextel.cleanversion.bill.chart.ChartPointStatus;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
+import br.com.nextel.cleanversion.bill.pager.BillPagerTabStrip;
 
 /**
  * Created by renato.soares on 12/22/16.
  */
-public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewTreeObserver.OnScrollChangedListener, View.OnTouchListener, GraphEventListener {
+public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewTreeObserver.OnScrollChangedListener,
+        View.OnTouchListener, GraphEventListener {
     private GestureDetector gestureDetector;
+    private BillPagerTabStrip headerTab;
     private BillHomeActivity activity;
     private ViewPager viewPager;
     private LineChart lineChart;
     private HorizontalScrollView scrollView;
     private Integer oldPosition;
 
-    public PagerGraphListener(BillHomeActivity activity, ViewPager viewPager, LineChart lineChart, HorizontalScrollView scrollView) {
+    public PagerGraphListener(BillHomeActivity activity, ViewPager viewPager, LineChart lineChart,
+                              HorizontalScrollView scrollView, BillPagerTabStrip strip) {
         this.activity = activity;
         this.viewPager = viewPager;
         this.lineChart = lineChart;
         this.scrollView = scrollView;
         this.gestureDetector = new GestureDetector(lineChart.getContext(), new GestureListener(this));
+        this.headerTab = strip;
     }
 
     @Override
@@ -58,6 +60,8 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
         } else {
             transition(point.status(), point.status());
         }
+
+        this.headerTab.scrollTo(this.headerTab.scrollChild(position), 0);
         this.oldPosition = position;
     }
 
