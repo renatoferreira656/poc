@@ -5,10 +5,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.List;
-
-import br.com.nextel.cleanversion.bill.chart.ChartPoint;
-
 /**
  * Created by renato.soares on 12/26/16.
  */
@@ -22,21 +18,25 @@ public class SwipeGestureListener implements GestureListener.GraphEventListener,
         this.gestureDetector = new GestureDetector(viewPager.getContext(), new GestureListener(this));
     }
 
-    public void onSwipeRight() {
+    public boolean onSwipeRight() {
         if (viewPager.getCurrentItem() > 0) {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, true);
+            return true;
         }
+        return false;
     }
 
-    public void onSwipeLeft() {
+    public boolean onSwipeLeft() {
         if (viewPager.getCurrentItem() <= viewPager.getAdapter().getCount()) {
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
+            return true;
         }
+        return false;
     }
 
     @Override
-    public void touch(float x, float y) {
-
+    public boolean touch(float x, float y) {
+        return false;
     }
 
     @Override

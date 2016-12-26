@@ -14,32 +14,30 @@ public final class GestureListener extends GestureDetector.SimpleOnGestureListen
 
     @Override
     public boolean onDown(MotionEvent e) {
-        this.listener.touch(e.getX(), e.getY());
-        return true;
+        return this.listener.touch(e.getX(), e.getY());
     }
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         if (e2 == null || e1 == null) {
-            return true;
+            return false;
         }
 
         float diffX = e2.getX() - e1.getX();
         if (Math.abs(diffX) > SWIPE_THRESHOLD) {
             if (diffX > 0) {
-                this.listener.onSwipeRight();
-                return true;
+                return this.listener.onSwipeRight();
             }
-            this.listener.onSwipeLeft();
+            return this.listener.onSwipeLeft();
         }
-        return true;
+        return false;
     }
 
     public interface GraphEventListener {
-        void onSwipeRight();
+        boolean onSwipeRight();
 
-        void onSwipeLeft();
+        boolean onSwipeLeft();
 
-        void touch(float x, float y);
+        boolean touch(float x, float y);
     }
 }

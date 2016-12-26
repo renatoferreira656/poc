@@ -4,7 +4,6 @@ import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 
 import java.util.List;
 
@@ -27,23 +26,26 @@ public class ChartGestureListener implements GestureListener.GraphEventListener,
 
 
     @Override
-    public void onSwipeRight() {
+    public boolean onSwipeRight() {
+        return false;
     }
 
     @Override
-    public void onSwipeLeft() {
+    public boolean onSwipeLeft() {
+        return false;
     }
 
     @Override
-    public void touch(float x, float y) {
+    public boolean touch(float x, float y) {
         int i = 0;
         for(ChartPoint point: this.points){
             if(point.isInside(x, y)){
                 viewPager.setCurrentItem(i, true);
-                return;
+                return true;
             }
             i++;
         }
+        return false;
     }
 
     @Override
