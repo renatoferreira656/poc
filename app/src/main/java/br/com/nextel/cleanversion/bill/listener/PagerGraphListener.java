@@ -17,6 +17,7 @@ import br.com.nextel.cleanversion.bill.chart.ChartPoint;
 import br.com.nextel.cleanversion.bill.chart.ChartPointStatus;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
 import br.com.nextel.cleanversion.bill.pager.BillPagerTabStrip;
+import br.com.nextel.cleanversion.bill.util.AnimationUtil;
 
 /**
  * Created by renato.soares on 12/22/16.
@@ -53,37 +54,18 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
             return;
         }
         ChartPoint point = this.lineChart.position(position);
-        animateScroll(this.scrollView, chartXPosition);
-        animateScroll(this.headerTab, tabXPosition);
+        AnimationUtil.animateScroll(this.scrollView, chartXPosition);
+        AnimationUtil.animateScroll(this.headerTab, tabXPosition);
         this.activity.changeDetails(point);
         if(oldPosition != null && position >= 0 && position < this.viewPager.getAdapter().getCount()){
-            transition(this.lineChart.getPoints().get(this.oldPosition).status(), point.status());
+            AnimationUtil.transition(this.activity.graphHolder(), this.lineChart.getPoints().get(this.oldPosition).status(), point.status());
         } else {
-            transition(point.status(), point.status());
+            AnimationUtil.transition(this.activity.graphHolder(), point.status(), point.status());
         }
 
         this.oldPosition = position;
     }
 
-    private void animateScroll(HorizontalScrollView scrollView, Integer xPosition) {
-        ObjectAnimator animator = ObjectAnimator.ofInt(scrollView, "scrollX", xPosition);
-        animator.setDuration(400);
-        animator.start();
-    }
-
-    public TransitionDrawable transition(ChartPointStatus from, ChartPointStatus to){
-        Drawable[] drawable = new Drawable[2];
-        drawable[0] = from.background(this.activity);
-        drawable[1] = to.background(this.activity);
-        TransitionDrawable transition = new TransitionDrawable(drawable);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            this.activity.graphHolder().setBackground(transition);
-        } else{
-            this.activity.graphHolder().setBackgroundDrawable(transition);
-        }
-        transition.startTransition(200);
-        return transition;
-    }
 
     @Override
     public void onScrollChanged() {
