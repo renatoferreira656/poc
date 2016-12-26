@@ -88,12 +88,12 @@ public class BillHomeActivity extends AppCompatActivity {
     @NonNull
     private List<ChartPoint> hardCodedData() {
         List<ChartPoint> originalData = new ArrayList<>();
-        originalData.add(new ChartPoint(130.0, ChartPointStatus.PAID, "JUL"));
-        originalData.add(new ChartPoint(132.0, ChartPointStatus.PAID, "AGO"));
-        originalData.add(new ChartPoint(125.1, ChartPointStatus.OVERDUE, "SET"));
-        originalData.add(new ChartPoint(122.0, ChartPointStatus.PAID, "OUT"));
-        originalData.add(new ChartPoint(140.0, ChartPointStatus.OVERDUE, "NOV"));
-        originalData.add(new ChartPoint(110.0, ChartPointStatus.PENDING, "DEZ"));
+        originalData.add(new ChartPoint(130f, ChartPointStatus.PAID, "JUL"));
+        originalData.add(new ChartPoint(132f, ChartPointStatus.PAID, "AGO"));
+        originalData.add(new ChartPoint(125f, ChartPointStatus.OVERDUE, "SET"));
+        originalData.add(new ChartPoint(122f, ChartPointStatus.PAID, "OUT"));
+        originalData.add(new ChartPoint(140f, ChartPointStatus.OVERDUE, "NOV"));
+        originalData.add(new ChartPoint(110f, ChartPointStatus.PENDING, "DEZ"));
         return originalData;
     }
 

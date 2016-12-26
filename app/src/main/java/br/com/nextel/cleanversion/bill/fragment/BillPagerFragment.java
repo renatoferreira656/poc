@@ -33,7 +33,7 @@ public class BillPagerFragment extends Fragment {
         return rootView;
     }
 
-    private String formatCentsToText(Double originalValue) {
+    private String formatCentsToText(Float originalValue) {
         String text = originalValue.toString();
         String cents = text.split("\\.")[1];
         if (cents.length() < 2) {
@@ -42,7 +42,7 @@ public class BillPagerFragment extends Fragment {
         return cents;
     }
 
-    private String formatPriceToText(Double originalValue) {
+    private String formatPriceToText(Float originalValue) {
         String text = originalValue.toString();
         return text.split("\\.")[0] + ",";
     }
