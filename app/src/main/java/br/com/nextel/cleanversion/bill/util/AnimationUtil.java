@@ -16,7 +16,7 @@ import br.com.nextel.cleanversion.bill.chart.ChartPointStatus;
 public class AnimationUtil {
     public static void animateScroll(HorizontalScrollView scrollView, Integer xPosition) {
         ObjectAnimator animator = ObjectAnimator.ofInt(scrollView, "scrollX", xPosition);
-        animator.setDuration(20);
+        animator.setDuration(100);
         animator.start();
     }
 

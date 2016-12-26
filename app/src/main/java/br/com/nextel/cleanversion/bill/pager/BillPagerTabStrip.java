@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -44,14 +45,14 @@ public class BillPagerTabStrip extends HorizontalScrollView {
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         this.addView(linearLayout);
 
-        linearLayout.addView(this.newText("", width));
-        linearLayout.addView(this.newText("", width));
+        linearLayout.addView(this.newText("", width, -1));
+        linearLayout.addView(this.newText("", width, -1));
         for (int i =0; i<adapter.getCount(); i++){
             CharSequence text = adapter.getPageTitle(i);
-            linearLayout.addView(this.newText(text, width));
+            linearLayout.addView(this.newText(text, width, i));
         }
-        linearLayout.addView(this.newText("", width));
-        linearLayout.addView(this.newText("", width));
+        linearLayout.addView(this.newText("", width, -1));
+        linearLayout.addView(this.newText("", width, -1));
     }
 
     private int getTextWidth() {
@@ -98,10 +99,17 @@ public class BillPagerTabStrip extends HorizontalScrollView {
     }
 
     @NonNull
-    private TextView newText(CharSequence text, int textWidth) {
+    private TextView newText(CharSequence text, int textWidth, final int pos) {
         TextView child = new TextView(this.getContext());
         child.setText(text);
         child.setTextColor(Color.WHITE);
+        child.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                viewPager.setCurrentItem(pos, true);
+                return false;
+            }
+        });
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(textWidth, LinearLayout.LayoutParams.MATCH_PARENT);
         child.setLayoutParams(lp);
         child.setGravity(Gravity.CENTER);

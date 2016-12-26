@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 
 import java.util.ArrayList;
@@ -18,9 +17,10 @@ import java.util.List;
 import br.com.nextel.cleanversion.bill.chart.ChartPoint;
 import br.com.nextel.cleanversion.bill.chart.ChartPointStatus;
 import br.com.nextel.cleanversion.bill.fragment.BillDescriptionFragment;
-import br.com.nextel.cleanversion.bill.listener.LineChartListener;
+import br.com.nextel.cleanversion.bill.listener.ChartGestureListener;
 import br.com.nextel.cleanversion.bill.listener.PagerGraphListener;
 import br.com.nextel.cleanversion.bill.listener.ScrollListener;
+import br.com.nextel.cleanversion.bill.listener.SwipeGestureListener;
 import br.com.nextel.cleanversion.bill.pager.BillPagerAdapter;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
 import br.com.dextra.cleanversion.R;
@@ -34,6 +34,7 @@ public class BillHomeActivity extends AppCompatActivity {
     private BillPagerTabStrip tabStrip;
     private HorizontalScrollView chartHorizontal;
     private PagerGraphListener pagerGraph;
+    private SwipeGestureListener touchListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,33 +50,27 @@ public class BillHomeActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         tabStrip = (BillPagerTabStrip) findViewById(R.id.pager_title_strip);
         chartHorizontal = (HorizontalScrollView) findViewById(R.id.scroll_line_chart);
-
-
-        initTabStrip();
-        configureDataChart();
-        configureViewPager();
-        ScrollListener scrollListener = new ScrollListener(mViewPager, mViewPager.getAdapter().getCount());
-        lineChart.scrollListener(scrollListener);
-        tabStrip.scrollLister(scrollListener);
-    }
-
-    private void configureDataChart() {
-        lineChart.setOnTouchListener(new LineChartListener(mViewPager, lineChart));
-        lineChart.setData(hardCodedData());
-        chartHorizontal.getViewTreeObserver().addOnScrollChangedListener(getChartListener());
-        chartHorizontal.setOnTouchListener(getChartListener());
-    }
-
-    private void initTabStrip() {
-        tabStrip.setOnTouchListener(getChartListener());
         tabStrip.setViewPager(mViewPager);
+        configData();
+        addListener();
     }
 
-    private void configureViewPager() {
+    private void configData() {
+        lineChart.setData(hardCodedData());
         BillPagerAdapter pagerAdpater = new BillPagerAdapter(getSupportFragmentManager(), lineChart.getPoints());
         mViewPager.setAdapter(pagerAdpater);
-        mViewPager.addOnPageChangeListener(getChartListener());
     }
+
+    private void addListener() {
+        ScrollListener scrollListener = new ScrollListener(mViewPager, mViewPager.getAdapter().getCount());
+        mViewPager.addOnPageChangeListener(getChartListener());
+        lineChart.setOnTouchListener(new ChartGestureListener(this.mViewPager, this.lineChart.getPoints()));
+        chartHorizontal.setOnTouchListener(getSwipeGestureListener());
+        lineChart.scrollListener(scrollListener);
+        tabStrip.scrollLister(scrollListener);
+        tabStrip.setOnTouchListener(getSwipeGestureListener());
+    }
+
 
     @NonNull
     private PagerGraphListener getChartListener() {
@@ -109,4 +104,13 @@ public class BillHomeActivity extends AppCompatActivity {
     public View graphHolder() {
         return graphHolderView;
     }
+
+    @NonNull
+    private SwipeGestureListener getSwipeGestureListener() {
+        if(touchListener == null) {
+            touchListener = new SwipeGestureListener(this.mViewPager);
+        }
+        return touchListener;
+    }
+
 }

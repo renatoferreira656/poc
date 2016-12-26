@@ -21,7 +21,7 @@ public enum ChartPointStatus {
     private Bitmap bitmap;
     private Drawable backgroundColor;
 
-    private ChartPointStatus(String color, int bitmapRes, int backgroundColor) {
+    ChartPointStatus(String color, int bitmapRes, int backgroundColor) {
         this.paint = PaintUtil.newPaint(color);
         this.bitmapRes = bitmapRes;
         this.backgroundColorRes = backgroundColor;
