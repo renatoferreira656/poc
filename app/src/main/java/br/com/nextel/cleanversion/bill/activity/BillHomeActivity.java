@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import br.com.nextel.cleanversion.bill.chart.ChartPointStatus;
 import br.com.nextel.cleanversion.bill.fragment.BillDescriptionFragment;
 import br.com.nextel.cleanversion.bill.listener.LineChartListener;
 import br.com.nextel.cleanversion.bill.listener.PagerGraphListener;
+import br.com.nextel.cleanversion.bill.listener.ScrollListener;
 import br.com.nextel.cleanversion.bill.pager.BillPagerAdapter;
 import br.com.nextel.cleanversion.bill.chart.LineChart;
 import br.com.dextra.cleanversion.R;
@@ -36,6 +38,8 @@ public class BillHomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
         graphHolderView = findViewById(R.id.bill_graph_holder);
 
@@ -50,17 +54,16 @@ public class BillHomeActivity extends AppCompatActivity {
         initTabStrip();
         configureDataChart();
         configureViewPager();
-
-
+        ScrollListener scrollListener = new ScrollListener(mViewPager, mViewPager.getAdapter().getCount());
+        lineChart.scrollListener(scrollListener);
+        tabStrip.scrollLister(scrollListener);
     }
 
     private void configureDataChart() {
         lineChart.setOnTouchListener(new LineChartListener(mViewPager, lineChart));
         lineChart.setData(hardCodedData());
-        lineChart.scrollView(getChartListener());
         chartHorizontal.getViewTreeObserver().addOnScrollChangedListener(getChartListener());
         chartHorizontal.setOnTouchListener(getChartListener());
-
     }
 
     private void initTabStrip() {
@@ -72,7 +75,6 @@ public class BillHomeActivity extends AppCompatActivity {
         BillPagerAdapter pagerAdpater = new BillPagerAdapter(getSupportFragmentManager(), lineChart.getPoints());
         mViewPager.setAdapter(pagerAdpater);
         mViewPager.addOnPageChangeListener(getChartListener());
-        mViewPager.setCurrentItem(pagerAdpater.getCount());
     }
 
     @NonNull

@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
+import android.widget.ScrollView;
 
 import br.com.nextel.cleanversion.bill.activity.BillHomeActivity;
 import br.com.nextel.cleanversion.bill.chart.ChartPoint;
@@ -45,15 +46,15 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
     }
 
     @Override
-    public void onPageSelected(int position) {
-        Integer calcScroll = this.lineChart.calcScroll(position);
-        if(calcScroll == null){
+    public void onPageSelected(final int position) {
+        Integer chartXPosition = this.lineChart.calcScroll(position);
+        Integer tabXPosition = this.headerTab.scrollChild(position);
+        if(chartXPosition == null || tabXPosition == null){
             return;
         }
         ChartPoint point = this.lineChart.position(position);
-        ObjectAnimator animator = ObjectAnimator.ofInt(scrollView, "scrollX", calcScroll);
-        animator.setDuration(400);
-        animator.start();
+        animateScroll(this.scrollView, chartXPosition);
+        animateScroll(this.headerTab, tabXPosition);
         this.activity.changeDetails(point);
         if(oldPosition != null && position >= 0 && position < this.viewPager.getAdapter().getCount()){
             transition(this.lineChart.getPoints().get(this.oldPosition).status(), point.status());
@@ -61,8 +62,13 @@ public class PagerGraphListener implements ViewPager.OnPageChangeListener, ViewT
             transition(point.status(), point.status());
         }
 
-        this.headerTab.smoothScrollTo(this.headerTab.scrollChild(position), 0);
         this.oldPosition = position;
+    }
+
+    private void animateScroll(HorizontalScrollView scrollView, Integer xPosition) {
+        ObjectAnimator animator = ObjectAnimator.ofInt(scrollView, "scrollX", xPosition);
+        animator.setDuration(400);
+        animator.start();
     }
 
     public TransitionDrawable transition(ChartPointStatus from, ChartPointStatus to){

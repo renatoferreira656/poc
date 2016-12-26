@@ -17,6 +17,9 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import br.com.nextel.cleanversion.bill.listener.PagerGraphListener;
+import br.com.nextel.cleanversion.bill.listener.ScrollListener;
+
 public class BillPagerTabStrip extends HorizontalScrollView {
     private static final String TAG = "PagerTabStrip";
     private ViewPager viewPager;
@@ -24,15 +27,17 @@ public class BillPagerTabStrip extends HorizontalScrollView {
     private Integer width;
     private LinearLayout linearLayout;
     private int position;
+    private PagerGraphListener pagerListener;
+    private ScrollListener scrollListener;
 
     public BillPagerTabStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     private void addViews() {
+        linearLayout = new LinearLayout(this.getContext());
         PagerAdapter adapter = this.viewPager.getAdapter();
         int width = getTextWidth();
-        linearLayout = new LinearLayout(this.getContext());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         linearLayout.setLayoutParams(lp);
@@ -62,6 +67,7 @@ public class BillPagerTabStrip extends HorizontalScrollView {
         if(width == null){
             width = (MeasureSpec.getSize(widthMeasureSpec));
             addViews();
+            this.scrollListener.tab(true);
         }
     }
 
@@ -102,15 +108,19 @@ public class BillPagerTabStrip extends HorizontalScrollView {
         return child;
     }
 
-    public int scrollChild(int position) {
+    public Integer scrollChild(int position) {
         if(this.linearLayout == null){
-            return 0;
+            return null;
         }
         View childAt = this.linearLayout.getChildAt(position);
         if(childAt == null){
             return this.width * position;
         }
         this.position = position;
-        return childAt.getLeft();
+        return getTextWidth() * position;
+    }
+
+    public void scrollLister(ScrollListener scrollListener) {
+        this.scrollListener = scrollListener;
     }
 }

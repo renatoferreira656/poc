@@ -17,6 +17,7 @@ import java.util.List;
 
 import br.com.nextel.cleanversion.bill.activity.PriceUtils;
 import br.com.nextel.cleanversion.bill.listener.PagerGraphListener;
+import br.com.nextel.cleanversion.bill.listener.ScrollListener;
 
 public class LineChart extends View {
 
@@ -27,7 +28,6 @@ public class LineChart extends View {
     private Integer space = 40;
     private Float width;
     private Float height;
-    private Integer paddingScreenCircle = 10;
 
     private Integer circleRadius = convertDpToPixel(10f).intValue();
     private int position;
@@ -38,8 +38,8 @@ public class LineChart extends View {
     private Paint paintStrokePath;
     private Paint paintFillPath;
 
-    private PagerGraphListener pagerListener;
     private boolean notFill = false;
+    private ScrollListener scrollListener;
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -194,6 +194,9 @@ public class LineChart extends View {
         int parentWidht = this.getRootView().getWidth();
         float half = parentWidht / 2;
         width = (float) parentWidht;
+        if(width < 1){
+            return;
+        }
         paddingX = half;
         space = (int) (width / visiblePoints);
         if (points != null) {
@@ -201,7 +204,7 @@ public class LineChart extends View {
         }
         height = new Float(MeasureSpec.getSize(heightMeasureSpec));
         this.setMeasuredDimension(this.width.intValue(), height.intValue());
-        this.pagerListener.onPageSelected(this.position);
+        this.scrollListener.graph(true);
     }
 
     public Integer calcScroll(int position) {
@@ -285,9 +288,8 @@ public class LineChart extends View {
         return this.points.get(position);
     }
 
-    public LineChart scrollView(PagerGraphListener pagerListener){
-        this.pagerListener = pagerListener;
-        return this;
+    public void scrollListener(ScrollListener scrollListener) {
+        this.scrollListener = scrollListener;
     }
 }
 
